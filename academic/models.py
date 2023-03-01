@@ -1,3 +1,5 @@
 from django.db import models
 
-# Create your models here.
+
+class Jurusan(models.Model):
+    nama = models.CharField(max_length=255)
