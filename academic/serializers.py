@@ -8,4 +8,8 @@ class JurusanSerializer(serializers.ModelSerializer):
         model = models.Jurusan
         fields = ['id', 'nama']
 
-        
+
+class SemesterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Semester
+        fields = ['no']

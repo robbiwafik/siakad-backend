@@ -5,7 +5,6 @@ from . import views
 
 router = SimpleRouter()
 router.register('jurusan', views.JurusanViewSet, basename='jurusan')
+router.register('semester', views.SemesterViewSet, basename='semester')
 
-urlpatterns = [
-    path('', include(router.urls))
-]
+urlpatterns = router.urls

@@ -8,3 +8,7 @@ class JurusanViewSet(ModelViewSet):
     queryset = models.Jurusan.objects.all()
     serializer_class = serializers.JurusanSerializer
 
+
+class SemesterViewSet(ModelViewSet):
+    queryset = models.Semester.objects.all()
+    serializer_class = serializers.SemesterSerializer
