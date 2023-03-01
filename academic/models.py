@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
+
 
 class Jurusan(models.Model):
     nama = models.CharField(max_length=255)
@@ -27,3 +29,9 @@ class Pemberitahuan(models.Model):
     thumbnail = models.ImageField()
     file = models.FileField(null=True)
     link = models.URLField(null=True)
+
+
+class UptTIK(models.Model):
+    nip = models.CharField(max_length=20, primary_key=True)
+    no_hp = models.CharField(max_length=13)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
