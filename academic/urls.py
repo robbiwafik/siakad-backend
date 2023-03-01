@@ -9,5 +9,6 @@ router.register('semester', views.SemesterViewSet, basename='semester')
 router.register('program_pendidikan', views.ProgramPendidikanViewSet, basename='program_pendidikan')
 router.register('gedung', views.GedungKuliahViewSet, basename='gedung')
 router.register('pemberitahuan', views.PemberitahuanViewSet, basename='pemberitahuan')
+router.register('prodi', views.ProgramStudiViewSet, basename='prodi')
 
 urlpatterns = router.urls

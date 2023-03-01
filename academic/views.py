@@ -32,3 +32,12 @@ class PemberitahuanViewSet(ModelViewSet):
         if self.action == 'list':
             return serializers.SimplePemberitahuanSerializer
         return serializers.PemberitahuanSerializer
+
+
+class ProgramStudiViewSet(ModelViewSet):
+    queryset = models.ProgramStudi.objects.all()
+    
+    def get_serializer_class(self):
+        if self.request.method in ['POST', 'PUT']:
+            return serializers.CreateUpdateProgramStudiSerializer
+        return serializers.ProgramStudiSerializer
