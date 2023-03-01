@@ -25,3 +25,15 @@ class GedungKuliahSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.GedungKuliah
         fields = ['id', 'nama']
+
+
+class SimplePemberitahuanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Pemberitahuan
+        fields = ['id', 'judul', 'sub_judul', 'thumbnail']
+
+
+class PemberitahuanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Pemberitahuan
+        fields = ['id', 'judul', 'sub_judul', 'detail', 'tanggal_terbit', 'thumbnail', 'file', 'link']

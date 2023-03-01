@@ -16,3 +16,14 @@ class ProgramPendidikan(models.Model):
 
 class GedungKuliah(models.Model):
     nama = models.CharField(max_length=255)
+
+
+class Pemberitahuan(models.Model):
+    judul = models.CharField(max_length=255)
+    sub_judul = models.CharField(max_length=255)
+    detail = models.TextField(null=True)
+    tanggal_terbit = models.DateField(auto_now_add=True)
+    tanggal_hapus = models.DateField(null=True)
+    thumbnail = models.ImageField()
+    file = models.FileField(null=True)
+    link = models.URLField(null=True)

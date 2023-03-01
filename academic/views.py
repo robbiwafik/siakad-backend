@@ -22,3 +22,13 @@ class ProgramPendidikanViewSet(ModelViewSet):
 class GedungKuliahViewSet(ModelViewSet):
     queryset = models.GedungKuliah.objects.all()
     serializer_class = serializers.GedungKuliahSerializer
+
+
+class PemberitahuanViewSet(ModelViewSet):
+    http_method_names = ['get', 'patch', 'post', 'delete']
+    queryset = models.Pemberitahuan.objects.all()
+    
+    def get_serializer_class(self, *args, **kwargs):
+        if self.action == 'list':
+            return serializers.SimplePemberitahuanSerializer
+        return serializers.PemberitahuanSerializer
