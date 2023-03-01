@@ -12,4 +12,7 @@ class Semester(models.Model):
 class ProgramPendidikan(models.Model):
     kode = models.CharField(max_length=5, primary_key=True)
     nama = models.CharField(max_length=255)
-    
+
+
+class GedungKuliah(models.Model):
+    nama = models.CharField(max_length=255)

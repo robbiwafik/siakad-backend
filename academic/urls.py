@@ -7,5 +7,6 @@ router = SimpleRouter()
 router.register('jurusan', views.JurusanViewSet, basename='jurusan')
 router.register('semester', views.SemesterViewSet, basename='semester')
 router.register('program_pendidikan', views.ProgramPendidikanViewSet, basename='program_pendidikan')
+router.register('gedung', views.GedungKuliahViewSet, basename='gedung')
 
 urlpatterns = router.urls

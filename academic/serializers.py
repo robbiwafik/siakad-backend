@@ -19,3 +19,9 @@ class ProgramPendidikanSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProgramPendidikan
         fields = ['kode', 'nama']
+
+
+class GedungKuliahSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.GedungKuliah
+        fields = ['id', 'nama']
