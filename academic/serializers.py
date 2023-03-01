@@ -13,3 +13,9 @@ class SemesterSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Semester
         fields = ['no']
+
+
+class ProgramPendidikanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ProgramPendidikan
+        fields = ['kode', 'nama']

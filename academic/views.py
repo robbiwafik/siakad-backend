@@ -12,3 +12,8 @@ class JurusanViewSet(ModelViewSet):
 class SemesterViewSet(ModelViewSet):
     queryset = models.Semester.objects.all()
     serializer_class = serializers.SemesterSerializer
+
+
+class ProgramPendidikanViewSet(ModelViewSet):
+    queryset = models.ProgramPendidikan.objects.all()
+    serializer_class = serializers.ProgramPendidikanSerializer

@@ -7,3 +7,9 @@ class Jurusan(models.Model):
 
 class Semester(models.Model):
     no = models.PositiveSmallIntegerField(primary_key=True, validators=[MinValueValidator(1)])
+
+
+class ProgramPendidikan(models.Model):
+    kode = models.CharField(max_length=5, primary_key=True)
+    nama = models.CharField(max_length=255)
+    
