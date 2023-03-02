@@ -10,6 +10,9 @@ class Jurusan(models.Model):
 class Semester(models.Model):
     no = models.PositiveSmallIntegerField(primary_key=True, validators=[MinValueValidator(1)])
 
+    def __str__(self) -> str:
+        return str(self.no)
+    
 
 class ProgramPendidikan(models.Model):
     kode = models.CharField(max_length=5, primary_key=True)
@@ -73,4 +76,10 @@ class Dosen(models.Model):
     no_hp = models.CharField(max_length=13)
     gelar = models.CharField(max_length=20)
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.PROTECT)
+
+
+class Kelas(models.Model):
+    huruf = models.CharField(max_length=1)
+    prodi = models.ForeignKey(ProgramStudi, on_delete=models.PROTECT, related_name="kelas_list")
+    semester = models.ForeignKey(Semester, on_delete=models.PROTECT, related_name="kelas_list")
 

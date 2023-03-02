@@ -69,3 +69,10 @@ class DosenViewSet(ModelViewSet):
         if self.request.method in ['POST', 'PUT']:
             return serializers.CreateUpdateDosenSerializer
         return serializers.DosenSerializer
+
+
+class KelasViewSet(ModelViewSet):
+    queryset = models.Kelas.objects\
+        .select_related('prodi', 'prodi__jurusan', 'prodi__program_pendidikan', 'semester')\
+        .all()
+    serializer_class = serializers.KelasSerializer

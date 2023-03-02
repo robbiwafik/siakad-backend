@@ -84,3 +84,9 @@ class DosenSerializer(serializers.ModelSerializer):
         model = models.Dosen
         fields = ['nip', 'nama', 'email', 'no_hp', 'gelar', 'prodi']
 
+
+class KelasSerializer(serializers.ModelSerializer):
+    prodi = ProgramStudiSerializer()
+    class Meta:
+        model = models.Kelas
+        fields = ['id', 'huruf', 'prodi', 'semester']
