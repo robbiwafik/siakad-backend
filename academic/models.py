@@ -42,3 +42,27 @@ class ProgramStudi(models.Model):
     nama = models.CharField(max_length=255)
     jurusan = models.ForeignKey(Jurusan, on_delete=models.PROTECT, related_name='prodi_list')
     program_pendidikan = models.ForeignKey(ProgramPendidikan, on_delete=models.PROTECT, related_name='prodi_list')
+
+    def __str__(self) -> str:
+        return self.nama
+
+
+class StaffProdi(models.Model):
+    nip = models.CharField(max_length=20, primary_key=True)
+    no_hp = models.CharField(max_length=255)
+    prodi = models.ForeignKey(ProgramStudi, on_delete=models.CASCADE, related_name="staff_prodi_list")
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def nama_depan(self):
+        return self.user.first_name
+    
+    def nama_belakang(self):
+        return self.user.last_name
+    
+    def username(self):
+        return self.user.username
+    
+    def email(self):
+        return self.user.email
+    
+    
