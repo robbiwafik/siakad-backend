@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.response import Response
 
 from . import models, serializers
 
@@ -41,3 +42,23 @@ class ProgramStudiViewSet(ModelViewSet):
         if self.request.method in ['POST', 'PUT']:
             return serializers.CreateUpdateProgramStudiSerializer
         return serializers.ProgramStudiSerializer
+
+
+class StaffProdiViewSet(ModelViewSet):
+    queryset = models.StaffProdi.objects.select_related('user').all()
+    
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return serializers.CreateStaffProdiSerializer
+        elif self.request.method == 'PUT':
+            return serializers.UpdateStaffProdiSerializer
+        return serializers.StaffProdiSerializer
+    
+    def create(self, request, *args, **kwargs):
+        serializer = serializers.CreateStaffProdiSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        staff_prodi = serializer.save()
+        serializer = serializers.StaffProdiSerializer(staff_prodi)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    
