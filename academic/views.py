@@ -61,4 +61,11 @@ class StaffProdiViewSet(ModelViewSet):
         serializer = serializers.StaffProdiSerializer(staff_prodi)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
+
+class DosenViewSet(ModelViewSet):
+    queryset = models.Dosen.objects.select_related('prodi').all()
     
+    def get_serializer_class(self):
+        if self.request.method in ['POST', 'PUT']:
+            return serializers.CreateUpdateDosenSerializer
+        return serializers.DosenSerializer

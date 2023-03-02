@@ -11,5 +11,6 @@ router.register('gedung', views.GedungKuliahViewSet, basename='gedung')
 router.register('pemberitahuan', views.PemberitahuanViewSet, basename='pemberitahuan')
 router.register('prodi', views.ProgramStudiViewSet, basename='prodi')
 router.register('staff_prodi', views.StaffProdiViewSet, basename='staff_prodi')
+router.register('dosen', views.DosenViewSet, basename='dosen')
 
 urlpatterns = router.urls

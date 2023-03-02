@@ -65,4 +65,12 @@ class StaffProdi(models.Model):
     def email(self):
         return self.user.email
     
-    
+
+class Dosen(models.Model):
+    nip = models.CharField(max_length=20, primary_key=True)
+    nama = models.CharField(max_length=255)
+    email = models.EmailField()
+    no_hp = models.CharField(max_length=13)
+    gelar = models.CharField(max_length=20)
+    prodi = models.ForeignKey(ProgramStudi, on_delete=models.PROTECT)
+
