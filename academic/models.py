@@ -83,3 +83,13 @@ class Kelas(models.Model):
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.PROTECT, related_name="kelas_list")
     semester = models.ForeignKey(Semester, on_delete=models.PROTECT, related_name="kelas_list")
 
+
+class Mahasiswa(models.Model):
+    nim = models.CharField(max_length=10, primary_key=True)
+    tanggal_lahir = models.DateField()
+    no_hp = models.CharField(max_length=13, null=True)
+    alamat = models.TextField(null=True)
+    foto_profil = models.ImageField(null=True)
+    pembimbing_akademik = models.ForeignKey(Dosen, on_delete=models.SET_NULL, null=True, related_name='mahasiswa_didik')
+    kelas = models.ForeignKey(Kelas, on_delete=models.PROTECT, related_name='mahasiswa_list')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
