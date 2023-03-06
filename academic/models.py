@@ -77,15 +77,21 @@ class Dosen(models.Model):
     gelar = models.CharField(max_length=20)
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.PROTECT)
 
+    def __str__(self) -> str:
+        return self.nama
+
 
 class Kelas(models.Model):
     huruf = models.CharField(max_length=1)
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.PROTECT, related_name="kelas_list")
     semester = models.ForeignKey(Semester, on_delete=models.PROTECT, related_name="kelas_list")
 
+    def __str__(self) -> str:
+        return self.prodi.kode + str(self.semester.no) + self.huruf
+
 
 class Mahasiswa(models.Model):
-    nim = models.CharField(max_length=10, primary_key=True)
+    nim = models.CharField(max_length=10, unique=True)
     tanggal_lahir = models.DateField()
     no_hp = models.CharField(max_length=13, null=True)
     alamat = models.TextField(null=True)
@@ -93,3 +99,14 @@ class Mahasiswa(models.Model):
     pembimbing_akademik = models.ForeignKey(Dosen, on_delete=models.SET_NULL, null=True, related_name='mahasiswa_didik')
     kelas = models.ForeignKey(Kelas, on_delete=models.PROTECT, related_name='mahasiswa_list')
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def nama_depan(self):
+        return self.user.first_name
+    
+    def nama_belakang(self):
+        return self.user.last_name
+    
+    def email(self):
+        return self.user.email
+
+    

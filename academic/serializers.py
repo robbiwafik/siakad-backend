@@ -85,8 +85,34 @@ class DosenSerializer(serializers.ModelSerializer):
         fields = ['nip', 'nama', 'email', 'no_hp', 'gelar', 'prodi']
 
 
+class SimpleDosenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Dosen
+        fields = ['nip', 'nama', 'gelar']
+
+
 class KelasSerializer(serializers.ModelSerializer):
     prodi = ProgramStudiSerializer()
     class Meta:
         model = models.Kelas
         fields = ['id', 'huruf', 'prodi', 'semester']
+
+
+class MahasiswaSerializer(serializers.ModelSerializer):
+    kelas = KelasSerializer()
+    pembimbing_akademik = SimpleDosenSerializer()
+    class Meta:
+        model = models.Mahasiswa
+        fields = ['nim', 'nama_depan', 'nama_belakang', 
+                  'email', 'tanggal_lahir', 'alamat', 
+                  'no_hp', 'foto_profil', 'pembimbing_akademik', 
+                  'kelas']
+
+
+class CreateUpdateMahasiswaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Mahasiswa
+        fields = ['nim', 'email', 'tanggal_lahir', 
+                  'alamat', 'no_hp', 'foto_profil', 
+                  'pembimbing_akademik', 'kelas', 'user']
+    
