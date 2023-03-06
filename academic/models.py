@@ -6,6 +6,9 @@ from django.db import models
 class Jurusan(models.Model):
     nama = models.CharField(max_length=255)
 
+    def __str__(self) -> str:
+        return self.nama
+
 
 class Semester(models.Model):
     no = models.PositiveSmallIntegerField(primary_key=True, validators=[MinValueValidator(1)])
@@ -134,3 +137,8 @@ class AduanRuangan(models.Model):
 class PemberitahuanProdi(models.Model):
     pemberitahuan = models.ForeignKey(Pemberitahuan, on_delete=models.CASCADE, related_name="filter_prodi")
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.CASCADE, related_name='pemberitahuan_list')
+
+
+class PemberitahuanJurusan(models.Model):
+    pemberitahuan = models.ForeignKey(Pemberitahuan, on_delete=models.CASCADE, related_name='filter_jurusan')
+    jurusan = models.ForeignKey(Jurusan, on_delete=models.CASCADE, related_name='pemberitahuan_list')

@@ -153,3 +153,13 @@ class PemberitahuanProdiSerializer(serializers.ModelSerializer):
         model = models.PemberitahuanProdi
         fields = ['id', 'prodi']
     
+
+class PemberitahuanJurusanSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        return models.PemberitahuanJurusan.objects.create(
+            pemberitahuan_id=self.context['pemberitahuan_id'],
+            **validated_data
+        )
+    class Meta:
+        model = models.PemberitahuanJurusan
+        fields = ['id', 'jurusan']

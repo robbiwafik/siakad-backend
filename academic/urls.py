@@ -21,9 +21,12 @@ ruangan_aduan.register('aduan', views.AduanRuanganViewSet, basename='ruangan-adu
 router.register('pemberitahuan', views.PemberitahuanViewSet, basename='pemberitahuan')
 pemberitahuan_prodi = routers.NestedDefaultRouter(router, 'pemberitahuan', lookup='pemberitahuan')
 pemberitahuan_prodi.register('prodi', views.PemberitahuanProdiViewSet, basename='pemberitahuan-prodi')
+pemberitahuan_jurusan = routers.NestedDefaultRouter(router, 'pemberitahuan', lookup='pemberitahuan')
+pemberitahuan_jurusan.register('jurusan', views.PemberitahuanJurusanViewSet, basename='pemberitahuan-jurusan')
 
 urlpatterns = [
     path('', include(router.urls)),
     path('', include(ruangan_aduan.urls)),
     path('', include(pemberitahuan_prodi.urls)),
+    path('', include(pemberitahuan_jurusan.urls))
 ]
