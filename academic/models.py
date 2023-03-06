@@ -22,6 +22,9 @@ class ProgramPendidikan(models.Model):
 class GedungKuliah(models.Model):
     nama = models.CharField(max_length=255)
 
+    def __str__(self) -> str:
+        return self.nama
+
 
 class Pemberitahuan(models.Model):
     judul = models.CharField(max_length=255)
@@ -109,4 +112,7 @@ class Mahasiswa(models.Model):
     def email(self):
         return self.user.email
 
-    
+
+class Ruangan(models.Model):
+    nama = models.CharField(max_length=255)
+    gedung = models.ForeignKey(GedungKuliah, on_delete=models.CASCADE)

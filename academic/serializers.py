@@ -115,4 +115,9 @@ class CreateUpdateMahasiswaSerializer(serializers.ModelSerializer):
         fields = ['nim', 'email', 'tanggal_lahir', 
                   'alamat', 'no_hp', 'foto_profil', 
                   'pembimbing_akademik', 'kelas', 'user']
-    
+
+
+class RuanganSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Ruangan
+        fields = ['id', 'nama', 'gedung']

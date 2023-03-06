@@ -90,3 +90,8 @@ class MahasiswaViewSet(ModelViewSet):
             return serializers.CreateUpdateMahasiswaSerializer
         return serializers.MahasiswaSerializer
     
+
+class RuanganViewSet(ModelViewSet):
+    queryset = models.Ruangan.objects.all()
+    serializer_class = serializers.RuanganSerializer
+    
