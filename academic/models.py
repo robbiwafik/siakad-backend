@@ -116,3 +116,16 @@ class Mahasiswa(models.Model):
 class Ruangan(models.Model):
     nama = models.CharField(max_length=255)
     gedung = models.ForeignKey(GedungKuliah, on_delete=models.CASCADE)
+
+
+class AduanRuangan(models.Model):
+    STATUS_DI_TANGGAPI = 'D'
+    STATUS_BELUM_DIBACA = 'B'
+    STATUS_CHOICES = [
+        (STATUS_DI_TANGGAPI, 'Di Tanggapi'),
+        (STATUS_BELUM_DIBACA, 'Belum Dibaca')
+    ]
+    detail = models.TextField()
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=STATUS_BELUM_DIBACA)
+    foto = models.ImageField()
+    ruangan = models.ForeignKey(Ruangan, on_delete=models.CASCADE)

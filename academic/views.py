@@ -95,3 +95,20 @@ class RuanganViewSet(ModelViewSet):
     queryset = models.Ruangan.objects.all()
     serializer_class = serializers.RuanganSerializer
     
+
+class AduanRuanganViewSet(ModelViewSet):
+    def get_queryset(self):
+        return models.AduanRuangan.objects.filter(ruangan_id=self.kwargs['ruangan_pk'])
+    
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return serializers.CreateAduanRuanganSerializer
+        elif self.request.method == 'PUT':
+            return serializers.UpdateAduanRuanganSerializer
+        return serializers.AduanRuanganSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['ruangan_id'] = self.kwargs['ruangan_pk']
+        return context
+    

@@ -121,3 +121,23 @@ class RuanganSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Ruangan
         fields = ['id', 'nama', 'gedung']
+
+
+class AduanRuanganSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        return models.AduanRuangan.objects.create(ruangan_id=self.context['ruangan_id'], **validated_data)
+    class Meta:
+        model = models.AduanRuangan
+        fields = ['id', 'status', 'detail', 'foto']
+
+
+class CreateAduanRuanganSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.AduanRuangan
+        fields = ['id', 'detail', 'foto']
+
+
+class UpdateAduanRuanganSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.AduanRuangan
+        fields = ['status']
