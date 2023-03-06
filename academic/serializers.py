@@ -141,3 +141,15 @@ class UpdateAduanRuanganSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.AduanRuangan
         fields = ['status']
+
+
+class PemberitahuanProdiSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        return models.PemberitahuanProdi.objects.create(
+            pemberitahuan_id=self.context['pemberitahuan_id'],
+            **validated_data
+        )
+    class Meta:
+        model = models.PemberitahuanProdi
+        fields = ['id', 'prodi']
+    

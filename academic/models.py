@@ -129,3 +129,8 @@ class AduanRuangan(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=STATUS_BELUM_DIBACA)
     foto = models.ImageField()
     ruangan = models.ForeignKey(Ruangan, on_delete=models.CASCADE)
+
+
+class PemberitahuanProdi(models.Model):
+    pemberitahuan = models.ForeignKey(Pemberitahuan, on_delete=models.CASCADE, related_name="filter_prodi")
+    prodi = models.ForeignKey(ProgramStudi, on_delete=models.CASCADE, related_name='pemberitahuan_list')

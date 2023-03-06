@@ -112,3 +112,16 @@ class AduanRuanganViewSet(ModelViewSet):
         context['ruangan_id'] = self.kwargs['ruangan_pk']
         return context
     
+
+class PemberitahuanProdiViewSet(ModelViewSet):
+    serializer_class = serializers.PemberitahuanProdiSerializer
+
+    def get_queryset(self):
+        return models.PemberitahuanProdi.objects.filter(pemberitahuan_id=self.kwargs['pemberitahuan_pk'])
+    
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['pemberitahuan_id'] = self.kwargs['pemberitahuan_pk']
+        return context
+    
