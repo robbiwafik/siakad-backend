@@ -1,7 +1,9 @@
 {
     "cSpell.words": [
+        "abstrak",
         "Aduan",
         "akademik",
+        "AKHIR",
         "alamat",
         "belakang",
         "BELUM",
@@ -13,12 +15,16 @@
         "gelar",
         "hapus",
         "huruf",
+        "Ilmiah",
         "judul",
         "Jurusan",
+        "Karya",
         "kelas",
         "kode",
         "Kuliah",
         "lahir",
+        "LAPORAN",
+        "MAGANG",
         "Mahasiswa",
         "Pemberitahuan",
         "pembimbing",
@@ -26,10 +32,14 @@
         "prodi",
         "profil",
         "Ruangan",
+        "SKRIPSI",
         "Studi",
         "tanggal",
         "TANGGAPI",
         "terbit",
+        "TIPE",
+        "TUGAS",
+        "versi",
         "viewsets"
     ]
 }

@@ -138,3 +138,16 @@ class PemberitahuanJurusanViewSet(ModelViewSet):
         context = super().get_serializer_context()
         context['pemberitahuan_id'] = self.kwargs['pemberitahuan_pk']
         return context
+
+
+class KaryaIlmiahViewSet(ModelViewSet):
+    queryset = models.KaryaIlmiah.objects\
+        .select_related('prodi', 'prodi__jurusan', 'prodi__program_pendidikan', 'mahasiswa', 'mahasiswa__user')\
+        .all()
+    serializer_class = serializers.KaryaIlmiahSerializer
+    
+    def get_serializer_class(self):
+        if self.request.method in ['POST', 'PUT']:
+            return serializers.CreateUpdateKaryaIlmiahSerializer
+        return serializers.KaryaIlmiahSerializer
+    

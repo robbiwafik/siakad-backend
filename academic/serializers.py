@@ -117,6 +117,16 @@ class CreateUpdateMahasiswaSerializer(serializers.ModelSerializer):
                   'pembimbing_akademik', 'kelas', 'user']
 
 
+class SimpleMahasiswaSerializer(serializers.ModelSerializer):
+    nama = serializers.SerializerMethodField(method_name='get_nama')
+
+    def get_nama(self, mahasiswa: models.Mahasiswa):
+        return f"{mahasiswa.user.first_name} {mahasiswa.user.last_name}"
+    class Meta:
+        model = models.Mahasiswa
+        fields = ['nim', 'nama']
+
+
 class RuanganSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Ruangan
@@ -163,3 +173,22 @@ class PemberitahuanJurusanSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.PemberitahuanJurusan
         fields = ['id', 'jurusan']
+
+
+class KaryaIlmiahSerializer(serializers.ModelSerializer):
+    mahasiswa = SimpleMahasiswaSerializer()
+    prodi = ProgramStudiSerializer()
+    class Meta:
+        model = models.KaryaIlmiah
+        fields = ['id', 'judul', 'abstrak', 
+                  'tanggal_terbit', 'link_versi_full', 'tipe', 
+                  'file_preview', 'prodi', 'mahasiswa']
+
+
+class CreateUpdateKaryaIlmiahSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.KaryaIlmiah
+        fields = ['id', 'judul', 'abstrak',
+                  'link_versi_full', 'tipe', 'file_preview', 
+                  'prodi', 'mahasiswa']
+        

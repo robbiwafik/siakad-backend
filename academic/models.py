@@ -106,6 +106,9 @@ class Mahasiswa(models.Model):
     kelas = models.ForeignKey(Kelas, on_delete=models.PROTECT, related_name='mahasiswa_list')
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+        return self.nim
+
     def nama_depan(self):
         return self.user.first_name
     
@@ -142,3 +145,32 @@ class PemberitahuanProdi(models.Model):
 class PemberitahuanJurusan(models.Model):
     pemberitahuan = models.ForeignKey(Pemberitahuan, on_delete=models.CASCADE, related_name='filter_jurusan')
     jurusan = models.ForeignKey(Jurusan, on_delete=models.CASCADE, related_name='pemberitahuan_list')
+
+
+class KaryaIlmiah(models.Model):
+    TIPE_LAPORAN_MAGANG = 'LM'
+    TIPE_TUGAS_AKHIR = 'TA'
+    TIPE_SKRIPSI = 'S'
+    TIPE_PROPOSAL_TA = 'PTA'
+    TIPE_PROPOSAL_S = 'PS'
+    TIPE_CHOICES = [
+        (TIPE_LAPORAN_MAGANG, 'Laporan Magang'),
+        (TIPE_TUGAS_AKHIR, 'Tugas Akhir'),
+        (TIPE_SKRIPSI, 'Skripsi'),
+        (TIPE_PROPOSAL_TA, 'Proposal Tugas Akhir'),
+        (TIPE_PROPOSAL_S, 'Proposal Skripsi')
+    ]
+
+    judul = models.CharField(max_length=255)
+    abstrak = models.TextField(null=True)
+    tanggal_terbit = models.DateField(auto_now_add=True)
+    link_versi_full = models.URLField(null=True)
+    tipe = models.CharField(max_length=3, choices=TIPE_CHOICES)
+    file_preview = models.FileField()
+    mahasiswa = models.ForeignKey(Mahasiswa, on_delete=models.SET_NULL, null=True, related_name='karya_ilmiah_list')
+
+    # We can get the 'prodi' using 'mahasiswa' field, but the requirement says that this field should be flexible
+    # because the 'staff prodi' actor should be able to upload 'karya ilmiah'. 
+    prodi = models.ForeignKey(ProgramStudi, on_delete=models.SET_NULL, null=True, related_name='karya_ilmiah_list')
+
+    
