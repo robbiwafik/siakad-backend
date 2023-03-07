@@ -218,3 +218,18 @@ class MataKuliahSerializer(serializers.ModelSerializer):
         fields = ['kode', 'nama', 'jumlah_teori', 
                   'jumlah_pratikum']
     
+
+class JadwalMakulSerializer(serializers.ModelSerializer):
+    nama_hari = serializers.CharField(source='get_hari_display',  read_only=True)
+    
+    def create(self, validated_data):
+        return models.JadwalMakul.objects.create(
+            jadwal_id=self.context['jadwal_id'],
+            **validated_data
+        )
+    
+    class Meta:
+        model = models.JadwalMakul
+        fields = ['id', 'hari', 'nama_hari', 'jam_mulai', 
+                  'jam_selesai', 'dosen', 'ruangan', 'mata_kuliah']
+    

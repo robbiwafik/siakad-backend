@@ -120,6 +120,9 @@ class Ruangan(models.Model):
     nama = models.CharField(max_length=255)
     gedung = models.ForeignKey(GedungKuliah, on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+        return self.nama
+
 
 class AduanRuangan(models.Model):
     STATUS_DI_TANGGAPI = 'D'
@@ -180,3 +183,32 @@ class MataKuliah(models.Model):
     nama = models.CharField(max_length=255)
     jumlah_teori = models.PositiveSmallIntegerField()
     jumlah_pratikum = models.PositiveSmallIntegerField()
+
+    def __str__(self) -> str:
+        return self.nama
+
+
+class JadwalMakul(models.Model):
+    HARI_SENIN = 'S'
+    HARI_SELASA = 'SE'
+    HARI_RABU = 'R'
+    HARI_KAMIS = 'K'
+    HARI_JUMAT = 'J'
+    HARI_CHOICES = [
+        (HARI_SENIN, 'Senin'),
+        (HARI_SELASA, 'Selasa'),
+        (HARI_RABU, 'Rabu'),
+        (HARI_KAMIS, 'Kamis'),
+        (HARI_JUMAT, 'Jumat')
+    ]
+    
+    jam_mulai = models.TimeField()
+    jam_selesai = models.TimeField()
+    hari = models.CharField(max_length=2, choices=HARI_CHOICES, default=HARI_SENIN)
+    jadwal = models.ForeignKey(Jadwal, on_delete=models.CASCADE, related_name='makul_list')
+    dosen = models.ForeignKey(Dosen, on_delete=models.PROTECT, related_name='makul_ajar')
+    ruangan = models.ForeignKey(Ruangan, on_delete=models.PROTECT)
+    mata_kuliah = models.ForeignKey(MataKuliah, on_delete=models.CASCADE)
+    
+    class Meta:
+        unique_together = ['jam_mulai', 'jam_selesai', 'hari', 'ruangan']

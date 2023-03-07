@@ -164,3 +164,13 @@ class MataKuliahViewSet(ModelViewSet):
     queryset = models.MataKuliah.objects.all()
     serializer_class = serializers.MataKuliahSerializer
     lookup_field = 'kode'
+
+
+class JadwalMakulViewSet(ModelViewSet):
+    queryset = models.JadwalMakul.objects.all()
+    serializer_class = serializers.JadwalMakulSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['jadwal_id'] = self.kwargs['jadwal_pk']
+        return context

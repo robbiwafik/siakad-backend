@@ -6,7 +6,6 @@ from . import views
 router = routers.SimpleRouter()
 router.register('dosen', views.DosenViewSet, basename='dosen')
 router.register('gedung', views.GedungKuliahViewSet, basename='gedung')
-router.register('jadwal', views.JadwalViewSet, basename='jadwal')
 router.register('jurusan', views.JurusanViewSet, basename='jurusan')
 router.register('karya_ilmiah', views.KaryaIlmiahViewSet, basename='karya_ilmiah')
 router.register('kelas', views.KelasViewSet, basename='kelas')
@@ -27,9 +26,15 @@ pemberitahuan_prodi.register('prodi', views.PemberitahuanProdiViewSet, basename=
 pemberitahuan_jurusan = routers.NestedDefaultRouter(router, 'pemberitahuan', lookup='pemberitahuan')
 pemberitahuan_jurusan.register('jurusan', views.PemberitahuanJurusanViewSet, basename='pemberitahuan-jurusan')
 
+router.register('jadwal', views.JadwalViewSet, basename='jadwal')
+jadwal_makul = routers.NestedDefaultRouter(router, 'jadwal', lookup='jadwal')
+jadwal_makul.register('makul', views.JadwalMakulViewSet, basename='jadwal-makul')
+
+
 urlpatterns = [
     path('', include(router.urls)),
     path('', include(ruangan_aduan.urls)),
     path('', include(pemberitahuan_prodi.urls)),
-    path('', include(pemberitahuan_jurusan.urls))
+    path('', include(pemberitahuan_jurusan.urls)),
+    path('', include(jadwal_makul.urls))
 ]
