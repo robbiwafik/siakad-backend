@@ -210,3 +210,11 @@ class CreateUpdateJadwalSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Jadwal
         fields = ['id', 'kelas']
+
+
+class MataKuliahSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.MataKuliah
+        fields = ['kode', 'nama', 'jumlah_teori', 
+                  'jumlah_pratikum']
+    

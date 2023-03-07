@@ -174,3 +174,9 @@ class KaryaIlmiah(models.Model):
 class Jadwal(models.Model):
     kelas = models.OneToOneField(Kelas, on_delete=models.CASCADE, related_name='jadwal_list')
 
+
+class MataKuliah(models.Model):
+    kode = models.CharField(max_length=255, unique=True)
+    nama = models.CharField(max_length=255)
+    jumlah_teori = models.PositiveSmallIntegerField()
+    jumlah_pratikum = models.PositiveSmallIntegerField()

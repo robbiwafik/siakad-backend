@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
@@ -159,3 +158,9 @@ class JadwalViewSet(ModelViewSet):
         if self.request.method in ['POST', 'PUT']:
             return serializers.CreateUpdateJadwalSerializer
         return serializers.JadwalSerializer
+
+
+class MataKuliahViewSet(ModelViewSet):
+    queryset = models.MataKuliah.objects.all()
+    serializer_class = serializers.MataKuliahSerializer
+    lookup_field = 'kode'
