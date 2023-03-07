@@ -92,9 +92,6 @@ class Kelas(models.Model):
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.PROTECT, related_name="kelas_list")
     semester = models.ForeignKey(Semester, on_delete=models.PROTECT, related_name="kelas_list")
 
-    def __str__(self) -> str:
-        return self.prodi.kode + str(self.semester.no) + self.huruf
-
 
 class Mahasiswa(models.Model):
     nim = models.CharField(max_length=10, unique=True)
@@ -173,4 +170,7 @@ class KaryaIlmiah(models.Model):
     # because the 'staff prodi' actor should be able to upload 'karya ilmiah'. 
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.SET_NULL, null=True, related_name='karya_ilmiah_list')
 
-    
+
+class Jadwal(models.Model):
+    kelas = models.OneToOneField(Kelas, on_delete=models.CASCADE, related_name='jadwal_list')
+

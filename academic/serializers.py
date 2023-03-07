@@ -98,6 +98,12 @@ class KelasSerializer(serializers.ModelSerializer):
         fields = ['id', 'huruf', 'prodi', 'semester']
 
 
+class SimpleKelasSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Kelas
+        fields = ['id', 'prodi', 'semester', 'huruf']
+
+
 class MahasiswaSerializer(serializers.ModelSerializer):
     kelas = KelasSerializer()
     pembimbing_akademik = SimpleDosenSerializer()
@@ -192,3 +198,15 @@ class CreateUpdateKaryaIlmiahSerializer(serializers.ModelSerializer):
                   'link_versi_full', 'tipe', 'file_preview', 
                   'prodi', 'mahasiswa']
         
+
+class JadwalSerializer(serializers.ModelSerializer):
+    kelas = SimpleKelasSerializer()
+    class Meta:
+        model = models.Jadwal
+        fields = ['id', 'kelas']
+
+
+class CreateUpdateJadwalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Jadwal
+        fields = ['id', 'kelas']

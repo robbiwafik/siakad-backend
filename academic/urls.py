@@ -6,6 +6,7 @@ from . import views
 router = routers.SimpleRouter()
 router.register('dosen', views.DosenViewSet, basename='dosen')
 router.register('gedung', views.GedungKuliahViewSet, basename='gedung')
+router.register('jadwal', views.JadwalViewSet, basename='jadwal')
 router.register('jurusan', views.JurusanViewSet, basename='jurusan')
 router.register('karya_ilmiah', views.KaryaIlmiahViewSet, basename='karya_ilmiah')
 router.register('kelas', views.KelasViewSet, basename='kelas')

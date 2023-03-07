@@ -150,4 +150,12 @@ class KaryaIlmiahViewSet(ModelViewSet):
         if self.request.method in ['POST', 'PUT']:
             return serializers.CreateUpdateKaryaIlmiahSerializer
         return serializers.KaryaIlmiahSerializer
+
+
+class JadwalViewSet(ModelViewSet):
+    queryset = models.Jadwal.objects.select_related('kelas').all()
     
+    def get_serializer_class(self):
+        if self.request.method in ['POST', 'PUT']:
+            return serializers.CreateUpdateJadwalSerializer
+        return serializers.JadwalSerializer
