@@ -1,6 +1,7 @@
+from django.db import IntegrityError
 from rest_framework import status
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from . import models, serializers
 
@@ -191,3 +192,42 @@ class KHSViewSet(ModelViewSet):
         khs = serializer.save()
         serializer = serializers.KHSSerializer(khs)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class NilaiKHSViewSet(ModelViewSet):
+    def get_queryset(self):
+        return models.NilaiKHS.objects.select_related('mata_kuliah').filter(khs_id=self.kwargs['khs_pk'])
+    
+    def get_serializer_class(self):
+        if self.request.method in ['POST', 'PUT']:
+            return serializers.CreateUpdateNilaiKHSSerializer
+        return serializers.NilaiKHSSerializer
+    
+    def create(self, request, *args, **kwargs):
+        serializer = serializers.CreateUpdateNilaiKHSSerializer(
+            data=request.data, 
+            context={'khs_id': kwargs['khs_pk']}
+        )
+        return self.perform_save(serializer, status=status.HTTP_201_CREATED)
+    
+    def update(self, request, *args, **kwargs):
+        serializer = serializers.CreateUpdateNilaiKHSSerializer(
+            self.get_object(),
+            data=request.data,
+            context={'khs_id': kwargs['khs_pk']}
+        )
+        return self.perform_save(serializer, status=status.HTTP_200_OK)
+    
+    def perform_save(self, serializer, **kwargs):
+        serializer.is_valid(raise_exception=True)
+        try:
+            nilai_khs = serializer.save()
+            serializer = serializers.NilaiKHSSerializer(nilai_khs)
+            return Response(serializer.data, status=kwargs['status'])
+        except IntegrityError:
+            return Response(
+                {'mata_kuliah': ['This "mata_kuliah" is already exist in the current "khs"']}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    

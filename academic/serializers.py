@@ -1,5 +1,4 @@
-from rest_framework import serializers, status
-from rest_framework.response import Response
+from rest_framework import serializers
 
 from . import models
 
@@ -220,6 +219,12 @@ class MataKuliahSerializer(serializers.ModelSerializer):
                   'jumlah_pratikum']
     
 
+class SimpleMataKuliahSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.MataKuliah
+        fields = ['kode', 'nama']
+
+
 class JadwalMakulSerializer(serializers.ModelSerializer):
     nama_hari = serializers.CharField(source='get_hari_display',  read_only=True)
     
@@ -268,3 +273,57 @@ class CreateKHSSerializer(serializers.ModelSerializer):
         model = models.KHS
         fields = ['id', 'mahasiswa', 'tahun_akademik_awal',
                   'tahun_akademik_akhir']
+
+
+class NilaiKHSSerializer(serializers.ModelSerializer):
+    mata_kuliah = SimpleMataKuliahSerializer()
+    class Meta:
+        model = models.NilaiKHS
+        fields = ['id', 'mata_kuliah', 'angka_mutu', 'huruf_mutu',
+                  'nilai', 'khs']
+
+
+class CreateUpdateNilaiKHSSerializer(serializers.ModelSerializer):
+    def get_huruf_mutu(self, nilai):
+        if nilai in range(0, 50):
+            return 'E'
+        elif nilai in range(50, 60):
+            return 'D'
+        elif nilai in range(60, 70):
+            return 'C'
+        elif nilai in range(70, 80):
+            return 'B'
+        return 'A'
+
+    def get_angka_mutu(self, huruf_mutu):
+        if huruf_mutu == 'E':
+            return 0
+        elif huruf_mutu == 'D':
+            return 1
+        elif huruf_mutu == 'C':
+            return 2
+        elif huruf_mutu == 'B':
+            return 3
+        return 4
+    
+    def create(self, validated_data):
+        khs_id = self.context['khs_id']
+        nilai = validated_data['nilai']
+        huruf_mutu = self.get_huruf_mutu(nilai)
+        angka_mutu = self.get_angka_mutu(huruf_mutu)
+        return models.NilaiKHS.objects.create(
+            khs_id=khs_id,
+            huruf_mutu=huruf_mutu,
+            angka_mutu=angka_mutu,
+            **validated_data
+        )
+    
+    def update(self, instance, validated_data):
+        nilai = validated_data['nilai']
+        validated_data['huruf_mutu'] = self.get_huruf_mutu(nilai)
+        validated_data['angka_mutu'] = self.get_angka_mutu(validated_data['huruf_mutu'])
+        return super().update(instance, validated_data)
+    
+    class Meta:
+        model = models.NilaiKHS
+        fields = ['id', 'mata_kuliah', 'nilai']

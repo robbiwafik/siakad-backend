@@ -229,3 +229,13 @@ class KHS(models.Model):
     kelas = models.CharField(max_length=5)
     mahasiswa = models.ForeignKey(Mahasiswa, on_delete=models.CASCADE, related_name='khs_list')
     
+
+class NilaiKHS(models.Model):
+    angka_mutu = models.IntegerField(validators=[MaxValueValidator(4)])
+    huruf_mutu = models.CharField(max_length=1)
+    nilai = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
+    khs = models.ForeignKey(KHS, on_delete=models.CASCADE, related_name='nilai_list')
+    mata_kuliah = models.ForeignKey(MataKuliah, on_delete=models.PROTECT)
+
+    class Meta:
+        unique_together = ['mata_kuliah', 'khs']
