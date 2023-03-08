@@ -174,3 +174,20 @@ class JadwalMakulViewSet(ModelViewSet):
         context = super().get_serializer_context()
         context['jadwal_id'] = self.kwargs['jadwal_pk']
         return context
+
+
+class KHSViewSet(ModelViewSet):
+    http_method_names = ['get', 'post', 'delete']
+    queryset = models.KHS.objects.select_related('mahasiswa', 'mahasiswa__user').all()
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return serializers.CreateKHSSerializer
+        return serializers.KHSSerializer
+    
+    def create(self, request, *args, **kwargs):
+        serializer = serializers.CreateKHSSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        khs = serializer.save()
+        serializer = serializers.KHSSerializer(khs)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

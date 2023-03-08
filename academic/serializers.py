@@ -1,4 +1,5 @@
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.response import Response
 
 from . import models
 
@@ -233,3 +234,37 @@ class JadwalMakulSerializer(serializers.ModelSerializer):
         fields = ['id', 'hari', 'nama_hari', 'jam_mulai', 
                   'jam_selesai', 'dosen', 'ruangan', 'mata_kuliah']
     
+
+class KHSSerializer(serializers.ModelSerializer):
+    mahasiswa = SimpleMahasiswaSerializer()
+    tahun_akademik = serializers.SerializerMethodField()
+
+    def get_tahun_akademik(self, khs: models.KHS):
+        return f'{khs.tahun_akademik_awal} / {khs.tahun_akademik_akhir}'
+    class Meta:
+        model = models.KHS
+        fields = ['id', 'semester', 'mahasiswa', 'kelas', 'dosen_pembimbing', 
+                  'program_studi', 'program_pendidikan', 'tahun_akademik']
+
+
+class CreateKHSSerializer(serializers.ModelSerializer):
+    def save(self, **kwargs):
+        nim = self.validated_data['mahasiswa']
+        mahasiswa = models.Mahasiswa\
+            .objects.select_related('kelas', 'kelas__prodi', 'kelas__prodi__program_pendidikan', 
+                                    'kelas__semester', 'pembimbing_akademik')\
+            .filter(nim=nim).first()
+        
+        return models.KHS.objects.create(
+            semester=mahasiswa.kelas.semester.no,
+            program_studi=mahasiswa.kelas.prodi.nama,
+            program_pendidikan=mahasiswa.kelas.prodi.program_pendidikan.nama,
+            dosen_pembimbing=f"{mahasiswa.pembimbing_akademik.nama} {mahasiswa.pembimbing_akademik.gelar}",
+            kelas = mahasiswa.kelas.huruf,
+            **self.validated_data
+        )
+                
+    class Meta:
+        model = models.KHS
+        fields = ['id', 'mahasiswa', 'tahun_akademik_awal',
+                  'tahun_akademik_akhir']

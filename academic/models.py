@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 
@@ -212,3 +212,20 @@ class JadwalMakul(models.Model):
     
     class Meta:
         unique_together = ['jam_mulai', 'jam_selesai', 'hari', 'ruangan']
+
+
+class KHS(models.Model):
+    ''' 
+    Almost all fields defined in this model can be retrieved from the 'mahasiswa' field,
+    however the client wants to keep the static version of a 'KHS'. Therefore, the fields that
+    can be retrieved from 'mahasiswa' field should be defined individually in the database.
+    '''
+    semester = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    program_studi = models.CharField(max_length=255)
+    program_pendidikan = models.CharField(max_length=255)
+    tahun_akademik_awal = models.IntegerField(validators=[MinValueValidator(2000), MaxValueValidator(3000)])
+    tahun_akademik_akhir = models.IntegerField(validators=[MinValueValidator(2000), MaxValueValidator(3000)])
+    dosen_pembimbing = models.CharField(max_length=255)
+    kelas = models.CharField(max_length=5)
+    mahasiswa = models.ForeignKey(Mahasiswa, on_delete=models.CASCADE, related_name='khs_list')
+    
