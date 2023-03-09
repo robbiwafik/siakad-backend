@@ -36,7 +36,7 @@ class SimplePemberitahuanSerializer(serializers.ModelSerializer):
 class PemberitahuanSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Pemberitahuan
-        fields = ['id', 'judul', 'sub_judul', 'detail', 'tanggal_terbit', 'thumbnail', 'file', 'link']
+        fields = ['id', 'judul', 'sub_judul', 'detail', 'tanggal_terbit', 'tanggal_hapus', 'thumbnail', 'file', 'link']
 
 
 class CreateUpdateProgramStudiSerializer(serializers.ModelSerializer):
