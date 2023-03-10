@@ -46,6 +46,12 @@ class UptTIK(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
+class TempUptTIK(models.Model):
+    no_induk = models.CharField(max_length=20, unique=True)
+    no_hp = models.CharField(max_length=13)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
 class ProgramStudi(models.Model):
     kode = models.CharField(max_length=10, primary_key=True)
     nama = models.CharField(max_length=255)
