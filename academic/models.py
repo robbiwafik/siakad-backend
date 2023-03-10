@@ -40,7 +40,7 @@ class Pemberitahuan(models.Model):
     link = models.URLField(null=True)
 
 
-class TempUptTIK(models.Model):
+class UptTIK(models.Model):
     no_induk = models.CharField(max_length=20, unique=True)
     no_hp = models.CharField(max_length=13)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
