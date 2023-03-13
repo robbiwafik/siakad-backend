@@ -42,7 +42,9 @@ class PemberitahuanSerializer(serializers.ModelSerializer):
 class CreateUpdateProgramStudiSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ProgramStudi
-        fields = ['kode', 'nama', 'jurusan', 'program_pendidikan']
+        fields = ['kode', 'nama', 'no_sk', 
+                  'tanggal_sk', 'tahun_operasional', 'jurusan', 
+                  'program_pendidikan']
 
 
 class ProgramStudiSerializer(serializers.ModelSerializer):
@@ -50,7 +52,9 @@ class ProgramStudiSerializer(serializers.ModelSerializer):
     program_pendidikan = ProgramPendidikanSerializer()
     class Meta:
         model = models.ProgramStudi
-        fields = ['kode', 'nama', 'jurusan', 'program_pendidikan']
+        fields = ['kode', 'nama', 'no_sk', 
+                  'tanggal_sk', 'tahun_operasional', 'jurusan', 
+                  'program_pendidikan']
 
 
 class StaffProdiSerializer(serializers.ModelSerializer):

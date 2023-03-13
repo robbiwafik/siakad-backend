@@ -38,6 +38,7 @@ class PemberitahuanViewSet(ModelViewSet):
 
 class ProgramStudiViewSet(ModelViewSet):
     queryset = models.ProgramStudi.objects.select_related('jurusan', 'program_pendidikan').all()
+    lookup_field = 'kode'
     
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:
