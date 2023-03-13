@@ -41,7 +41,7 @@ class PemberitahuanSerializer(serializers.ModelSerializer):
 
 class CreateUpdateProgramStudiSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.ProgramStudi
+        model = models.TempProgramStudi
         fields = ['kode', 'nama', 'jurusan', 'program_pendidikan']
 
 
@@ -49,7 +49,7 @@ class ProgramStudiSerializer(serializers.ModelSerializer):
     jurusan = JurusanSerializer()
     program_pendidikan = ProgramPendidikanSerializer()
     class Meta:
-        model = models.ProgramStudi
+        model = models.TempProgramStudi
         fields = ['kode', 'nama', 'jurusan', 'program_pendidikan']
 
 

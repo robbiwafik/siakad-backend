@@ -46,16 +46,6 @@ class UptTIK(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
-class ProgramStudi(models.Model):
-    kode = models.CharField(max_length=10, primary_key=True)
-    nama = models.CharField(max_length=255)
-    jurusan = models.ForeignKey(Jurusan, on_delete=models.PROTECT, related_name='prodi_list')
-    program_pendidikan = models.ForeignKey(ProgramPendidikan, on_delete=models.PROTECT, related_name='prodi_list')
-
-    def __str__(self) -> str:
-        return self.nama
-
-
 class TempProgramStudi(models.Model):
 	kode = models.CharField(max_length=10, unique=True)
 	nama = models.CharField(max_length=255)

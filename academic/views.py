@@ -37,7 +37,7 @@ class PemberitahuanViewSet(ModelViewSet):
 
 
 class ProgramStudiViewSet(ModelViewSet):
-    queryset = models.ProgramStudi.objects.select_related('jurusan', 'program_pendidikan').all()
+    queryset = models.TempProgramStudi.objects.select_related('jurusan', 'program_pendidikan').all()
     
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:
