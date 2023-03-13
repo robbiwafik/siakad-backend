@@ -73,6 +73,7 @@ class StaffProdi(models.Model):
     nip = models.CharField(max_length=20, primary_key=True)
     no_hp = models.CharField(max_length=255)
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.CASCADE, related_name="staff_prodi_list")
+    temp_program_studi = models.ForeignKey(TempProgramStudi, on_delete=models.CASCADE, null=True) # add related_name and set null = false later
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def nama_depan(self):
@@ -95,6 +96,7 @@ class Dosen(models.Model):
     no_hp = models.CharField(max_length=13)
     gelar = models.CharField(max_length=20)
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.PROTECT)
+    temp_program_studi = models.ForeignKey(TempProgramStudi, on_delete=models.PROTECT, null=True) # set null=false later
 
     def __str__(self) -> str:
         return self.nama
@@ -103,6 +105,7 @@ class Dosen(models.Model):
 class Kelas(models.Model):
     huruf = models.CharField(max_length=1)
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.PROTECT, related_name="kelas_list")
+    temp_program_studi = models.ForeignKey(TempProgramStudi, on_delete=models.PROTECT, null=True) # add related_name and set null = false later
     semester = models.ForeignKey(Semester, on_delete=models.PROTECT, related_name="kelas_list")
 
 
@@ -153,6 +156,7 @@ class AduanRuangan(models.Model):
 class PemberitahuanProdi(models.Model):
     pemberitahuan = models.ForeignKey(Pemberitahuan, on_delete=models.CASCADE, related_name="filter_prodi")
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.CASCADE, related_name='pemberitahuan_list')
+    temp_program_studi = models.ForeignKey(TempProgramStudi, on_delete=models.CASCADE, null=True) # add related_name and set null = false later
 
 
 class PemberitahuanJurusan(models.Model):
@@ -185,6 +189,7 @@ class KaryaIlmiah(models.Model):
     # We can get the 'prodi' using 'mahasiswa' field, but the requirement says that this field should be flexible
     # because the 'staff prodi' actor should be able to upload 'karya ilmiah'. 
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.SET_NULL, null=True, related_name='karya_ilmiah_list')
+    temp_program_studi = models.ForeignKey(TempProgramStudi, on_delete=models.SET_NULL, null=True) # add related_name later
 
 
 class Jadwal(models.Model):
