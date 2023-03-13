@@ -49,11 +49,11 @@ class UptTIK(models.Model):
 class ProgramStudi(models.Model):
 	kode = models.CharField(max_length=10, unique=True)
 	nama = models.CharField(max_length=255)
-	jurusan = models.ForeignKey(Jurusan, on_delete=models.PROTECT) # add related_name later
-	program_pendidikan = models.ForeignKey(ProgramPendidikan, on_delete=models.PROTECT) # add related_name later
-	no_sk = models.CharField(max_length=12, default='-')
-	tanggal_sk = models.DateField(auto_now_add=True)
-	tahun_operasional = models.PositiveIntegerField(validators=[MinValueValidator(2000), MaxValueValidator(3000)], default=2008)
+	jurusan = models.ForeignKey(Jurusan, on_delete=models.PROTECT)
+	program_pendidikan = models.ForeignKey(ProgramPendidikan, on_delete=models.PROTECT)
+	no_sk = models.CharField(max_length=12)
+	tanggal_sk = models.DateField()
+	tahun_operasional = models.PositiveIntegerField(validators=[MinValueValidator(2000), MaxValueValidator(3000)])
 	
 	def __str__(self) -> str:
 		return self.nama
