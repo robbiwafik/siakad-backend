@@ -21,6 +21,9 @@ class ProgramPendidikan(models.Model):
     kode = models.CharField(max_length=5, primary_key=True)
     nama = models.CharField(max_length=255)
 
+    def __str__(self) -> str:
+        return self.nama
+
 
 class GedungKuliah(models.Model):
     nama = models.CharField(max_length=255)
