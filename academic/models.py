@@ -56,6 +56,19 @@ class ProgramStudi(models.Model):
         return self.nama
 
 
+class TempProgramStudi(models.Model):
+	kode = models.CharField(max_length=10, unique=True)
+	nama = models.CharField(max_length=255)
+	jurusan = models.ForeignKey(Jurusan, on_delete=models.PROTECT) # add related_name later
+	program_pendidikan = models.ForeignKey(ProgramPendidikan, on_delete=models.PROTECT) # add related_name later
+	no_sk = models.CharField(max_length=12, default='-')
+	tanggal_sk = models.DateField(auto_now_add=True)
+	tahun_operasional = models.PositiveIntegerField(validators=[MinValueValidator(2000), MaxValueValidator(3000)], default=2008)
+	
+	def __str__(self) -> str:
+		return self.nama
+
+
 class StaffProdi(models.Model):
     nip = models.CharField(max_length=20, primary_key=True)
     no_hp = models.CharField(max_length=255)
