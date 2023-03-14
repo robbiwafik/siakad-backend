@@ -62,10 +62,10 @@ class ProgramStudi(models.Model):
 		return self.nama
 
 
-class TempStaffProdi(models.Model):
+class StaffProdi(models.Model):
     no_induk = models.CharField(max_length=20, unique=True)
     no_hp = models.CharField(max_length=255)
-    prodi = models.ForeignKey(ProgramStudi, on_delete=models.CASCADE) # add related name later
+    prodi = models.ForeignKey(ProgramStudi, on_delete=models.CASCADE)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def nama_depan(self):
