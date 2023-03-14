@@ -65,6 +65,7 @@ class StaffProdiViewSet(ModelViewSet):
 
 class DosenViewSet(ModelViewSet):
     queryset = models.Dosen.objects.select_related('prodi').all()
+    lookup_field = 'nip'
     
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:

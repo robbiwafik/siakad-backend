@@ -82,7 +82,7 @@ class StaffProdi(models.Model):
 
 
 class Dosen(models.Model):
-    nip = models.CharField(max_length=20, primary_key=True)
+    nip = models.CharField(max_length=20, unique=True)
     nama = models.CharField(max_length=255)
     email = models.EmailField()
     no_hp = models.CharField(max_length=13)
@@ -105,7 +105,7 @@ class Mahasiswa(models.Model):
     no_hp = models.CharField(max_length=13, null=True)
     alamat = models.TextField(null=True)
     foto_profil = models.ImageField(null=True)
-    pembimbing_akademik = models.ForeignKey(Dosen, on_delete=models.SET_NULL, null=True, related_name='mahasiswa_didik')
+    pembimbing_akademik = models.ForeignKey(Dosen, on_delete=models.SET_NULL, null=True, related_name='mahasiswa_didik') # rename it to pembimbing_akademik later
     kelas = models.ForeignKey(Kelas, on_delete=models.PROTECT, related_name='mahasiswa_list')
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
@@ -212,7 +212,7 @@ class JadwalMakul(models.Model):
     jam_selesai = models.TimeField()
     hari = models.CharField(max_length=2, choices=HARI_CHOICES, default=HARI_SENIN)
     jadwal = models.ForeignKey(Jadwal, on_delete=models.CASCADE, related_name='makul_list')
-    dosen = models.ForeignKey(Dosen, on_delete=models.PROTECT, related_name='makul_ajar')
+    dosen = models.ForeignKey(Dosen, on_delete=models.PROTECT, null=True, related_name='makul_ajar') # remove null=True and rename later
     ruangan = models.ForeignKey(Ruangan, on_delete=models.PROTECT)
     mata_kuliah = models.ForeignKey(MataKuliah, on_delete=models.CASCADE)
     
