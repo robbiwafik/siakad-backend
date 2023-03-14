@@ -93,6 +93,18 @@ class Dosen(models.Model):
         return self.nama
 
 
+class TempDosen(models.Model):
+    nip = models.CharField(max_length=20, unique=True)
+    nama = models.CharField(max_length=255)
+    email = models.EmailField()
+    no_hp = models.CharField(max_length=13)
+    gelar = models.CharField(max_length=20)
+    prodi = models.ForeignKey(ProgramStudi, on_delete=models.PROTECT)
+
+    def __str__(self) -> str:
+        return self.nama
+
+
 class Kelas(models.Model):
     huruf = models.CharField(max_length=1)
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.PROTECT, related_name='kelas_list')
