@@ -83,7 +83,7 @@ class CreateUpdateDosenSerializer(serializers.ModelSerializer):
 
 
 class DosenSerializer(serializers.ModelSerializer):
-    prodi = ProgramStudiSerializer()
+    prodi = SimpleProgramStudiSerializer()
     class Meta:
         model = models.Dosen
         fields = ['nip', 'nama', 'email', 'no_hp', 'gelar', 'prodi']
