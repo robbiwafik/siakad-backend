@@ -57,23 +57,23 @@ class ProgramStudiSerializer(serializers.ModelSerializer):
                   'program_pendidikan']
 
 
+class SimpleProgramStudiSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ProgramStudi
+        fields = ['id', 'kode', 'nama']
+
+
 class StaffProdiSerializer(serializers.ModelSerializer):
+    prodi = SimpleProgramStudiSerializer()
     class Meta:
         model = models.StaffProdi
-        fields = ['nip', 'nama_depan', 'nama_belakang', 'username', 'email', 'no_hp', 'prodi']
+        fields = ['no_induk', 'nama_depan', 'nama_belakang', 'username', 'email', 'no_hp', 'prodi']
 
 
-class CreateStaffProdiSerializer(serializers.ModelSerializer):
+class CreateUpdateStaffProdiSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.StaffProdi
-        fields = ['nip', 'no_hp', 'prodi', 'user']
-
-
-class UpdateStaffProdiSerializer(serializers.ModelSerializer):
-    nip = serializers.CharField(max_length=20, read_only=True)
-    class Meta:
-        model = models.StaffProdi
-        fields = ['nip', 'no_hp', 'prodi', 'user']
+        fields = ['no_induk', 'no_hp', 'prodi', 'user']
 
 
 class CreateUpdateDosenSerializer(serializers.ModelSerializer):

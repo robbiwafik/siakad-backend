@@ -47,17 +47,16 @@ class ProgramStudiViewSet(ModelViewSet):
 
 
 class StaffProdiViewSet(ModelViewSet):
-    queryset = models.StaffProdi.objects.select_related('user').all()
+    queryset = models.StaffProdi.objects.select_related('prodi', 'user').all()
+    lookup_field = 'no_induk'
     
     def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return serializers.CreateStaffProdiSerializer
-        elif self.request.method == 'PUT':
-            return serializers.UpdateStaffProdiSerializer
+        if self.request.method in ['POST', 'PUT']:
+            return serializers.CreateUpdateStaffProdiSerializer
         return serializers.StaffProdiSerializer
     
     def create(self, request, *args, **kwargs):
-        serializer = serializers.CreateStaffProdiSerializer(data=request.data)
+        serializer = serializers.CreateUpdateStaffProdiSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         staff_prodi = serializer.save()
         serializer = serializers.StaffProdiSerializer(staff_prodi)
