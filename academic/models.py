@@ -79,7 +79,26 @@ class StaffProdi(models.Model):
     
     def email(self):
         return self.user.email
+
+
+class TempStaffProdi(models.Model):
+    no_induk = models.CharField(max_length=20, unique=True)
+    no_hp = models.CharField(max_length=255)
+    prodi = models.ForeignKey(ProgramStudi, on_delete=models.CASCADE) # add related name later
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def nama_depan(self):
+        return self.user.first_name
     
+    def nama_belakang(self):
+        return self.user.last_name
+    
+    def username(self):
+        return self.user.username
+    
+    def email(self):
+        return self.user.email
+
 
 class Dosen(models.Model):
     nip = models.CharField(max_length=20, primary_key=True)
