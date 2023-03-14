@@ -47,7 +47,7 @@ class ProgramStudiViewSet(ModelViewSet):
 
 
 class StaffProdiViewSet(ModelViewSet):
-    queryset = models.StaffProdi.objects.select_related('user').all()
+    queryset = models.TempStaffProdi.objects.select_related('user').all()
     
     def get_serializer_class(self):
         if self.request.method == 'POST':

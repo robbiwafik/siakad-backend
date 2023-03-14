@@ -59,20 +59,20 @@ class ProgramStudiSerializer(serializers.ModelSerializer):
 
 class StaffProdiSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.StaffProdi
+        model = models.TempStaffProdi
         fields = ['nip', 'nama_depan', 'nama_belakang', 'username', 'email', 'no_hp', 'prodi']
 
 
 class CreateStaffProdiSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.StaffProdi
+        model = models.TempStaffProdi
         fields = ['nip', 'no_hp', 'prodi', 'user']
 
 
 class UpdateStaffProdiSerializer(serializers.ModelSerializer):
     nip = serializers.CharField(max_length=20, read_only=True)
     class Meta:
-        model = models.StaffProdi
+        model = models.TempStaffProdi
         fields = ['nip', 'no_hp', 'prodi', 'user']
 
 

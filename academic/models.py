@@ -62,25 +62,6 @@ class ProgramStudi(models.Model):
 		return self.nama
 
 
-class StaffProdi(models.Model):
-    nip = models.CharField(max_length=20, primary_key=True)
-    no_hp = models.CharField(max_length=255)
-    prodi = models.ForeignKey(ProgramStudi, on_delete=models.CASCADE, related_name='staff_prodi_list')
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    def nama_depan(self):
-        return self.user.first_name
-    
-    def nama_belakang(self):
-        return self.user.last_name
-    
-    def username(self):
-        return self.user.username
-    
-    def email(self):
-        return self.user.email
-
-
 class TempStaffProdi(models.Model):
     no_induk = models.CharField(max_length=20, unique=True)
     no_hp = models.CharField(max_length=255)
