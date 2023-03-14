@@ -64,7 +64,7 @@ class StaffProdiViewSet(ModelViewSet):
     
 
 class DosenViewSet(ModelViewSet):
-    queryset = models.TempDosen.objects.select_related('prodi').all()
+    queryset = models.Dosen.objects.select_related('prodi').all()
     
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:

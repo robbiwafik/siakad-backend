@@ -78,20 +78,20 @@ class CreateUpdateStaffProdiSerializer(serializers.ModelSerializer):
 
 class CreateUpdateDosenSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.TempDosen
+        model = models.Dosen
         fields = ['nip', 'nama', 'email', 'no_hp', 'gelar', 'prodi']
 
 
 class DosenSerializer(serializers.ModelSerializer):
     prodi = ProgramStudiSerializer()
     class Meta:
-        model = models.TempDosen
+        model = models.Dosen
         fields = ['nip', 'nama', 'email', 'no_hp', 'gelar', 'prodi']
 
 
 class SimpleDosenSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.TempDosen
+        model = models.Dosen
         fields = ['nip', 'nama', 'gelar']
 
 
