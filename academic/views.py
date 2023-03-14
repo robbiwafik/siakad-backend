@@ -93,7 +93,10 @@ class MahasiswaViewSet(ModelViewSet):
     
 
 class RuanganViewSet(ModelViewSet):
-    queryset = models.Ruangan.objects.all()
+    queryset = models.Ruangan.objects\
+        .prefetch_related('jadwalmakul_set', 'jadwalmakul_set__dosen', 'jadwalmakul_set__mata_kuliah',
+                          'jadwalmakul_set__jadwal')\
+        .all()
     serializer_class = serializers.RuanganSerializer
     
 
