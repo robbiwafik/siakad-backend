@@ -77,9 +77,13 @@ class DosenViewSet(ModelViewSet):
 
 class KelasViewSet(ModelViewSet):
     queryset = models.Kelas.objects\
-        .select_related('prodi', 'prodi__jurusan', 'prodi__program_pendidikan', 'semester')\
+        .select_related('prodi__jurusan', 'prodi__program_pendidikan', 'semester')\
         .all()
-    serializer_class = serializers.KelasSerializer
+    
+    def get_serializer_class(self):
+        if self.request.method in ['POST', 'PUT']:
+            return serializers.CreateUpdateKelasSerializer
+        return serializers.KelasSerializer
 
 
 class MahasiswaViewSet(ModelViewSet):
