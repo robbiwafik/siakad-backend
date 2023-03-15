@@ -176,7 +176,11 @@ class KaryaIlmiahViewSet(ModelViewSet):
 
 
 class JadwalViewSet(ModelViewSet):
-    queryset = models.Jadwal.objects.select_related('kelas__prodi').all()
+    queryset = models.Jadwal.objects\
+        .select_related('kelas__prodi')\
+        .prefetch_related('makul_list__dosen', 'makul_list__ruangan', 
+                          'makul_list__mata_kuliah', 'makul_list__ruangan__gedung')\
+        .all()
     
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:

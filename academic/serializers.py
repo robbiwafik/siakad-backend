@@ -229,19 +229,6 @@ class CreateUpdateKaryaIlmiahSerializer(serializers.ModelSerializer):
         fields = ['id', 'judul', 'abstrak',
                   'link_versi_full', 'tipe', 'file_preview', 
                   'prodi', 'mahasiswa']
-        
-
-class JadwalSerializer(serializers.ModelSerializer):
-    kelas = SimpleKelasSerializer()
-    class Meta:
-        model = models.Jadwal
-        fields = ['id', 'kelas']
-
-
-class CreateUpdateJadwalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Jadwal
-        fields = ['id', 'kelas']
 
 
 class MataKuliahSerializer(serializers.ModelSerializer):
@@ -317,6 +304,21 @@ class CreateUpdateJadwalMakulSerializer(serializers.ModelSerializer):
         fields = ['id', 'hari', 'jam_mulai'
                   'jam_selesai', 'dosen', 'ruangan', 
                   'mata_kuliah']
+        
+
+class JadwalSerializer(serializers.ModelSerializer):
+    kelas = SimpleKelasSerializer()
+    makul_list = JadwalMakulSerializer(many=True)
+    
+    class Meta:
+        model = models.Jadwal
+        fields = ['id', 'kelas', 'makul_list']
+
+
+class CreateUpdateJadwalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Jadwal
+        fields = ['id', 'kelas']
 
 
 class KHSSerializer(serializers.ModelSerializer):
