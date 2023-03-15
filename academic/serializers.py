@@ -207,12 +207,14 @@ class SimplePemberitahuanSerializer(serializers.ModelSerializer):
 class KaryaIlmiahSerializer(serializers.ModelSerializer):
     mahasiswa = SimpleMahasiswaSerializer()
     prodi = SimpleProgramStudiSerializer()
-    
+    kode_tipe = serializers.CharField(source='tipe')
+    tipe = serializers.CharField(source='get_tipe_display', read_only=True)
+
     class Meta:
         model = models.KaryaIlmiah
         fields = ['id', 'judul', 'abstrak', 
-                  'tanggal_terbit', 'link_versi_full', 'tipe', 
-                  'file_preview', 'prodi', 'mahasiswa']
+                  'tanggal_terbit', 'link_versi_full', 'kode_tipe',
+                  'file_preview', 'prodi', 'mahasiswa', 'tipe']
 
 
 class CreateUpdateKaryaIlmiahSerializer(serializers.ModelSerializer):
