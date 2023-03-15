@@ -166,6 +166,7 @@ class PemberitahuanProdiSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.PemberitahuanProdi
         fields = ['id', 'prodi']
+  
     
 class CreatePemberitahuanProdiSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
@@ -180,12 +181,20 @@ class CreatePemberitahuanProdiSerializer(serializers.ModelSerializer):
 
 
 class PemberitahuanJurusanSerializer(serializers.ModelSerializer):
+    jurusan = JurusanSerializer()
+    
+    class Meta:
+        model = models.PemberitahuanJurusan
+        fields = ['id', 'jurusan']
+
+
+class CreatePemberitahuanJurusanSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return models.PemberitahuanJurusan.objects.create(
             pemberitahuan_id=self.context['pemberitahuan_id'],
             **validated_data
         )
-    
+
     class Meta:
         model = models.PemberitahuanJurusan
         fields = ['id', 'jurusan']

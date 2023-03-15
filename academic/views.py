@@ -137,13 +137,20 @@ class PemberitahuanProdiViewSet(ModelViewSet):
 
 
 class PemberitahuanJurusanViewSet(ModelViewSet):
-    serializer_class = serializers.PemberitahuanJurusanSerializer
+    http_method_names = ['get', 'post', 'delete']
 
     def get_queryset(self):
-        return models.PemberitahuanJurusan.objects.filter(
-            pemberitahuan_id=self.kwargs['pemberitahuan_pk']
-        )
+        return models.PemberitahuanJurusan.objects\
+            .select_related('jurusan')\
+            .filter(
+                pemberitahuan_id=self.kwargs['pemberitahuan_pk']
+            )
 
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return serializers.CreatePemberitahuanJurusanSerializer
+        return serializers.PemberitahuanJurusanSerializer
+    
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['pemberitahuan_id'] = self.kwargs['pemberitahuan_pk']
