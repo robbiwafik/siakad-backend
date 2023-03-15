@@ -36,7 +36,9 @@ class SimplePemberitahuanSerializer(serializers.ModelSerializer):
 class PemberitahuanSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Pemberitahuan
-        fields = ['id', 'judul', 'sub_judul', 'detail', 'tanggal_terbit', 'tanggal_hapus', 'thumbnail', 'file', 'link']
+        fields = ['id', 'judul', 'sub_judul', 
+                  'detail', 'tanggal_terbit', 'tanggal_hapus', 
+                  'thumbnail', 'file', 'link']
 
 
 class CreateUpdateProgramStudiSerializer(serializers.ModelSerializer):
@@ -159,15 +161,23 @@ class UpdateAduanRuanganSerializer(serializers.ModelSerializer):
 
 
 class PemberitahuanProdiSerializer(serializers.ModelSerializer):
+    prodi = SimpleProgramStudiSerializer()
+    
+    class Meta:
+        model = models.PemberitahuanProdi
+        fields = ['id', 'prodi']
+    
+class CreatePemberitahuanProdiSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return models.PemberitahuanProdi.objects.create(
             pemberitahuan_id=self.context['pemberitahuan_id'],
             **validated_data
         )
+    
     class Meta:
         model = models.PemberitahuanProdi
         fields = ['id', 'prodi']
-    
+
 
 class PemberitahuanJurusanSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
@@ -175,6 +185,7 @@ class PemberitahuanJurusanSerializer(serializers.ModelSerializer):
             pemberitahuan_id=self.context['pemberitahuan_id'],
             **validated_data
         )
+    
     class Meta:
         model = models.PemberitahuanJurusan
         fields = ['id', 'jurusan']

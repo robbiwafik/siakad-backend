@@ -118,12 +118,18 @@ class AduanRuanganViewSet(ModelViewSet):
     
 
 class PemberitahuanProdiViewSet(ModelViewSet):
-    serializer_class = serializers.PemberitahuanProdiSerializer
+    http_method_names = ['get', 'post', 'delete']
+
+    def get_serializer_class(self, *args, **kwargs):
+        if self.request.method == 'POST':
+            return serializers.CreatePemberitahuanProdiSerializer
+        return serializers.PemberitahuanProdiSerializer
 
     def get_queryset(self):
-        return models.PemberitahuanProdi.objects.filter(pemberitahuan_id=self.kwargs['pemberitahuan_pk'])
+        return models.PemberitahuanProdi.objects\
+            .select_related('prodi')\
+            .filter(pemberitahuan_id=self.kwargs['pemberitahuan_pk'])
     
-
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['pemberitahuan_id'] = self.kwargs['pemberitahuan_pk']
