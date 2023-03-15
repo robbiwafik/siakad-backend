@@ -172,7 +172,7 @@ class KaryaIlmiahViewSet(ModelViewSet):
 
 
 class JadwalViewSet(ModelViewSet):
-    queryset = models.Jadwal.objects.select_related('kelas').all()
+    queryset = models.Jadwal.objects.select_related('kelas__prodi').all()
     
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:
