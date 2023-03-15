@@ -176,11 +176,14 @@ class KaryaIlmiahViewSet(ModelViewSet):
 
 
 class JadwalViewSet(ModelViewSet):
-    queryset = models.Jadwal.objects\
+    def get_queryset(self):
+        queryset = models.Jadwal.objects\
         .select_related('kelas__prodi')\
         .prefetch_related('makul_list__dosen', 'makul_list__ruangan', 
-                          'makul_list__mata_kuliah', 'makul_list__ruangan__gedung')\
-        .all()
+                          'makul_list__mata_kuliah', 'makul_list__ruangan__gedung')
+        kelas_id = self.request.GET.get('kelas_id', None)
+        
+        return queryset.filter(kelas_id=kelas_id) if kelas_id else queryset.all()
     
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:
