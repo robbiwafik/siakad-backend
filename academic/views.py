@@ -200,7 +200,7 @@ class JadwalMakulViewSet(ModelViewSet):
 
 class KHSViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'delete']
-    queryset = models.KHS.objects.select_related('mahasiswa', 'mahasiswa__user').all()
+    queryset = models.KHS.objects.select_related('mahasiswa__user').all()
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
