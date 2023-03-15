@@ -187,7 +187,9 @@ class MataKuliahViewSet(ModelViewSet):
 
 
 class JadwalMakulViewSet(ModelViewSet):
-    queryset = models.JadwalMakul.objects.all()
+    queryset = models.JadwalMakul.objects\
+        .select_related('dosen', 'mata_kuliah', 'ruangan__gedung')\
+        .all()
     serializer_class = serializers.JadwalMakulSerializer
 
     def get_serializer_context(self):

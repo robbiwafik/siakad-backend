@@ -256,21 +256,6 @@ class SimpleMataKuliahSerializer(serializers.ModelSerializer):
         fields = ['kode', 'nama', 'sks']
 
 
-class JadwalMakulSerializer(serializers.ModelSerializer):
-    nama_hari = serializers.CharField(source='get_hari_display',  read_only=True)
-    
-    def create(self, validated_data):
-        return models.JadwalMakul.objects.create(
-            jadwal_id=self.context['jadwal_id'],
-            **validated_data
-        )
-    
-    class Meta:
-        model = models.JadwalMakul
-        fields = ['id', 'hari', 'nama_hari', 'jam_mulai', 
-                  'jam_selesai', 'dosen', 'ruangan', 'mata_kuliah']
-    
-
 class SimpleJadwalMakulSerializer(serializers.ModelSerializer):
     kelas = serializers.SerializerMethodField()
     nama_hari = serializers.CharField(source='get_hari_display',  read_only=True)
@@ -292,6 +277,41 @@ class RuanganSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Ruangan
         fields = ['id', 'nama', 'gedung', 'jadwal_pemakaian']
+
+
+class SimpleRuanganSerializer(serializers.ModelSerializer):
+    gedung = GedungKuliahSerializer()
+    class Meta:
+        model = models.Ruangan
+        fields = ['id', 'nama', 'gedung']
+
+
+class JadwalMakulSerializer(serializers.ModelSerializer):
+    kode_hari = serializers.CharField(source='hari')
+    hari = serializers.CharField(source='get_hari_display',  read_only=True)
+    dosen = SimpleDosenSerializer()
+    ruangan = SimpleRuanganSerializer()
+    mata_kuliah = SimpleMataKuliahSerializer()
+    
+    class Meta:
+        model = models.JadwalMakul
+        fields = ['id', 'hari', 'kode_hari', 'jam_mulai', 
+                  'jam_selesai', 'dosen', 'ruangan', 'mata_kuliah']    
+
+
+class CreateUpdateJadwalMakulSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        return models.JadwalMakul.objects.create(
+            jadwal_id=self.context['jadwal_id'],
+            **validated_data
+        )
+    
+    class Meta:
+        model = models.JadwalMakul
+        fields = ['id', 'hari', 'jam_mulai'
+                  'jam_selesai', 'dosen', 'ruangan', 
+                  'mata_kuliah']
+
 
 
 class KHSSerializer(serializers.ModelSerializer):
