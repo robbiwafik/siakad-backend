@@ -27,12 +27,6 @@ class GedungKuliahSerializer(serializers.ModelSerializer):
         fields = ['id', 'nama']
 
 
-class SimplePemberitahuanSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Pemberitahuan
-        fields = ['id', 'judul', 'sub_judul', 'thumbnail']
-
-
 class PemberitahuanSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Pemberitahuan
@@ -166,8 +160,8 @@ class PemberitahuanProdiSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.PemberitahuanProdi
         fields = ['id', 'prodi']
-  
-    
+
+
 class CreatePemberitahuanProdiSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return models.PemberitahuanProdi.objects.create(
@@ -198,6 +192,16 @@ class CreatePemberitahuanJurusanSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.PemberitahuanJurusan
         fields = ['id', 'jurusan']
+
+
+class SimplePemberitahuanSerializer(serializers.ModelSerializer):
+    filter_prodi = PemberitahuanProdiSerializer(many=True)
+    filter_jurusan = PemberitahuanJurusanSerializer(many=True)
+    
+    class Meta:
+        model = models.Pemberitahuan
+        fields = ['id', 'judul', 'sub_judul', 
+                  'thumbnail', 'filter_prodi', 'filter_jurusan']
 
 
 class KaryaIlmiahSerializer(serializers.ModelSerializer):
