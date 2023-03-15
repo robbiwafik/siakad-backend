@@ -206,7 +206,8 @@ class SimplePemberitahuanSerializer(serializers.ModelSerializer):
 
 class KaryaIlmiahSerializer(serializers.ModelSerializer):
     mahasiswa = SimpleMahasiswaSerializer()
-    prodi = ProgramStudiSerializer()
+    prodi = SimpleProgramStudiSerializer()
+    
     class Meta:
         model = models.KaryaIlmiah
         fields = ['id', 'judul', 'abstrak', 
