@@ -6,3 +6,8 @@ class IsUptTIK(BasePermission):
     def has_permission(self, request, view):
         return hasattr(request.user, 'upttik')
 
+
+class IsStaffProdi(BasePermission):
+    def has_permission(self, request, view):
+        return hasattr(request.user, 'staffprodi')
+
