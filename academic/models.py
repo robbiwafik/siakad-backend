@@ -105,7 +105,8 @@ class Mahasiswa(models.Model):
     no_hp = models.CharField(max_length=13, null=True)
     alamat = models.TextField(null=True)
     foto_profil = models.ImageField(null=True)
-    pembimbing_akademik = models.ForeignKey(Dosen, on_delete=models.SET_NULL, null=True, related_name='mahasiswa_didik') # rename it to pembimbing_akademik later
+    tahun_angkatan = models.PositiveIntegerField(validators=[MinValueValidator(2008), MaxValueValidator(3000)])
+    pembimbing_akademik = models.ForeignKey(Dosen, on_delete=models.SET_NULL, null=True, related_name='mahasiswa_didik')
     kelas = models.ForeignKey(Kelas, on_delete=models.PROTECT, related_name='mahasiswa_list')
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
