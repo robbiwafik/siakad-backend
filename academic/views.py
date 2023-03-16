@@ -35,6 +35,9 @@ class GedungKuliahViewSet(ModelViewSet):
     queryset = models.GedungKuliah.objects.all()
     serializer_class = serializers.GedungKuliahSerializer
 
+    def get_permissions(self):
+        return [AllowAny()] if self.request.method == 'GET' else [permissions.IsUptTIK()]
+    
 
 class PemberitahuanViewSet(ModelViewSet):
     http_method_names = ['get', 'patch', 'post', 'delete']
