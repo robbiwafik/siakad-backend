@@ -19,6 +19,9 @@ class SemesterViewSet(ModelViewSet):
     queryset = models.Semester.objects.all()
     serializer_class = serializers.SemesterSerializer
 
+    def get_permissions(self):
+        return [AllowAny()] if self.request.method == 'GET' else [permissions.IsUptTIK()]
+
 
 class ProgramPendidikanViewSet(ModelViewSet):
     queryset = models.ProgramPendidikan.objects.all()
