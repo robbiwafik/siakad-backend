@@ -11,3 +11,7 @@ class IsStaffProdi(BasePermission):
     def has_permission(self, request, view):
         return hasattr(request.user, 'staffprodi')
 
+class IsMahasiswa(BasePermission):
+    def has_permission(self, request, view):
+        return hasattr(request.user, 'mahasiswa')
+    
