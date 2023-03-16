@@ -1,14 +1,18 @@
 from django.db import IntegrityError
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 
-from . import models, serializers
+from . import models, serializers, permissions
 
 
 class JurusanViewSet(ModelViewSet):
     queryset = models.Jurusan.objects.all()
     serializer_class = serializers.JurusanSerializer
+
+    def get_permissions(self):
+        return [AllowAny()] if self.request.method == 'GET' else [permissions.IsUptTIK()]
 
 
 class SemesterViewSet(ModelViewSet):
