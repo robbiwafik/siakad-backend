@@ -50,6 +50,9 @@ class PemberitahuanViewSet(ModelViewSet):
             return serializers.SimplePemberitahuanSerializer
         return serializers.PemberitahuanSerializer
 
+    def get_permissions(self):
+        return [AllowAny()] if self.request.method == 'GET' else [permissions.IsUptTIkOrIsStaffProdi()]
+    
 
 class ProgramStudiViewSet(ModelViewSet):
     queryset = models.ProgramStudi.objects.select_related('jurusan', 'program_pendidikan').all()
