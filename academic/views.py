@@ -27,6 +27,9 @@ class ProgramPendidikanViewSet(ModelViewSet):
     queryset = models.ProgramPendidikan.objects.all()
     serializer_class = serializers.ProgramPendidikanSerializer
 
+    def get_permissions(self):
+        return [AllowAny()] if self.request.method == 'GET' else [permissions.IsUptTIK()]
+
 
 class GedungKuliahViewSet(ModelViewSet):
     queryset = models.GedungKuliah.objects.all()
