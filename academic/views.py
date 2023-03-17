@@ -116,6 +116,9 @@ class KelasViewSet(ModelViewSet):
             return serializers.CreateUpdateKelasSerializer
         return serializers.KelasSerializer
 
+    def get_permissions(self):
+        return [AllowAny()] if self.request.method == 'GET' else [permissions.IsStaffProdi()]
+    
 
 class MahasiswaViewSet(ModelViewSet):
     queryset = models.Mahasiswa.objects\
