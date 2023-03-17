@@ -80,6 +80,11 @@ class StaffProdiViewSet(ModelViewSet):
             return serializers.CreateUpdateStaffProdiSerializer
         return serializers.StaffProdiSerializer
     
+    def get_permissions(self):
+        if self.action == 'retrieve' or self.request.method == 'PUT':
+            return [permissions.IsUptTIkOrIsStaffProdi()]
+        return [permissions.IsUptTIK()]
+    
     def create(self, request, *args, **kwargs):
         serializer = serializers.CreateUpdateStaffProdiSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
