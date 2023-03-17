@@ -198,6 +198,7 @@ class PemberitahuanProdiViewSet(ModelViewSet):
 
 class PemberitahuanJurusanViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'delete']
+    permission_classes = [permissions.IsUptTIK]
 
     def get_queryset(self):
         return models.PemberitahuanJurusan.objects\
