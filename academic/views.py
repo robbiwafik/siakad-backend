@@ -164,6 +164,13 @@ class AduanRuanganViewSet(ModelViewSet):
         context['ruangan_id'] = self.kwargs['ruangan_pk']
         return context
     
+    def get_permissions(self):
+        if self.request.method == 'GET' or self.request.method == 'DELETE':
+            return [permissions.IsUptTIKOrIsMahasiswa()]
+        elif self.request.method == 'PUT':
+            return [permissions.IsUptTIK()]
+        return [permissions.IsMahasiswa()]
+    
 
 class PemberitahuanProdiViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'delete']
