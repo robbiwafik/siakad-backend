@@ -165,7 +165,7 @@ class AduanRuanganViewSet(ModelViewSet):
         return context
     
     def get_permissions(self):
-        if self.request.method == 'GET' or self.request.method == 'DELETE':
+        if self.request.method in ['GET', 'DELETE']:
             return [permissions.IsUptTIKOrIsMahasiswa()]
         elif self.request.method == 'PUT':
             return [permissions.IsUptTIK()]
@@ -189,7 +189,12 @@ class PemberitahuanProdiViewSet(ModelViewSet):
         context = super().get_serializer_context()
         context['pemberitahuan_id'] = self.kwargs['pemberitahuan_pk']
         return context
-
+    
+    def get_permissions(self):
+        if self.request.method in ['POST']:
+            return [permissions.IsUptTIkOrIsStaffProdi()]
+        return [permissions.IsUptTIK()]
+    
 
 class PemberitahuanJurusanViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'delete']
