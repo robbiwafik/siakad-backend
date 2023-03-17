@@ -1,7 +1,7 @@
 from django.db import IntegrityError
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from . import models, serializers, permissions
@@ -102,6 +102,9 @@ class DosenViewSet(ModelViewSet):
             return serializers.CreateUpdateDosenSerializer
         return serializers.DosenSerializer
 
+    def get_permissions(self):
+        return [IsAuthenticated()] if self.request.method == 'GET' else [permissions.IsStaffProdi()]
+    
 
 class KelasViewSet(ModelViewSet):
     queryset = models.Kelas.objects\
