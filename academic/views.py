@@ -131,6 +131,11 @@ class MahasiswaViewSet(ModelViewSet):
             return serializers.CreateUpdateMahasiswaSerializer
         return serializers.MahasiswaSerializer
     
+    def get_permissions(self):
+        if self.action == 'retrieve' or self.request.method == 'PUT':
+            return [permissions.IsStaffProdiOrIsMahasiswa()]
+        return [permissions.IsStaffProdi()]
+    
 
 class RuanganViewSet(ModelViewSet):
     queryset = models.Ruangan.objects\
