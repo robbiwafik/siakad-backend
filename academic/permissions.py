@@ -30,3 +30,8 @@ class IsStaffProdiOrIsMahasiswa(BasePermission):
     def has_permission(self, request, view):
         return hasattr(request.user, staff_prodi) or hasattr(request.user, mahasiswa)
     
+
+class IsUptTIKOrIsMahasiswa(BasePermission):
+    def has_permission(self, request, view):
+        return hasattr(request.user, upt_tik) or hasattr(request.user, mahasiswa)
+
