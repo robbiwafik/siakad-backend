@@ -143,6 +143,9 @@ class RuanganViewSet(ModelViewSet):
                           'jadwalmakul_set__jadwal')\
         .all()
     serializer_class = serializers.RuanganSerializer
+
+    def get_permissions(self):
+        return [AllowAny()] if self.request.method == 'GET' else [permissions.IsUptTIK()]
     
 
 class AduanRuanganViewSet(ModelViewSet):
