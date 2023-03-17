@@ -252,6 +252,11 @@ class JadwalViewSet(ModelViewSet):
             return serializers.CreateUpdateJadwalSerializer
         return serializers.JadwalSerializer
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [permissions.IsStaffProdiOrIsMahasiswa()]
+        return [permissions.IsStaffProdi()]
+    
 
 class MataKuliahViewSet(ModelViewSet):
     queryset = models.MataKuliah.objects.all()
