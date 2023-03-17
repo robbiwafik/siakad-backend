@@ -63,6 +63,13 @@ class ProgramStudiViewSet(ModelViewSet):
             return serializers.CreateUpdateProgramStudiSerializer
         return serializers.ProgramStudiSerializer
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        elif self.request.method == 'PUT':
+            return [permissions.IsUptTIkOrIsStaffProdi()]
+        return [permissions.IsUptTIK()]
+
 
 class StaffProdiViewSet(ModelViewSet):
     queryset = models.StaffProdi.objects.select_related('prodi', 'user').all()
