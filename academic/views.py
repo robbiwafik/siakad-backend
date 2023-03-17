@@ -229,6 +229,13 @@ class KaryaIlmiahViewSet(ModelViewSet):
             return serializers.CreateUpdateKaryaIlmiahSerializer
         return serializers.KaryaIlmiahSerializer
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        elif self.request.method == 'DELETE':
+            return [permissions.IsStaffProdi()]
+        return [permissions.IsStaffProdiOrIsMahasiswa()]
+    
 
 class JadwalViewSet(ModelViewSet):
     def get_queryset(self):
