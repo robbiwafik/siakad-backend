@@ -298,13 +298,18 @@ class KHSViewSet(ModelViewSet):
             return serializers.CreateKHSSerializer
         return serializers.KHSSerializer
     
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [permissions.IsStaffProdiOrIsMahasiswa()]
+        return [permissions.IsStaffProdi()]
+    
     def create(self, request, *args, **kwargs):
         serializer = serializers.CreateKHSSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         khs = serializer.save()
         serializer = serializers.KHSSerializer(khs)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
+    
 
 class NilaiKHSViewSet(ModelViewSet):
     def get_queryset(self):
