@@ -1,30 +1,43 @@
 from django.db import IntegrityError
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from . import models, serializers
+from . import models, serializers, permissions
 
 
 class JurusanViewSet(ModelViewSet):
     queryset = models.Jurusan.objects.all()
     serializer_class = serializers.JurusanSerializer
 
+    def get_permissions(self):
+        return [AllowAny()] if self.request.method == 'GET' else [permissions.IsUptTIK()]
+
 
 class SemesterViewSet(ModelViewSet):
     queryset = models.Semester.objects.all()
     serializer_class = serializers.SemesterSerializer
+
+    def get_permissions(self):
+        return [AllowAny()] if self.request.method == 'GET' else [permissions.IsUptTIK()]
 
 
 class ProgramPendidikanViewSet(ModelViewSet):
     queryset = models.ProgramPendidikan.objects.all()
     serializer_class = serializers.ProgramPendidikanSerializer
 
+    def get_permissions(self):
+        return [AllowAny()] if self.request.method == 'GET' else [permissions.IsUptTIK()]
+
 
 class GedungKuliahViewSet(ModelViewSet):
     queryset = models.GedungKuliah.objects.all()
     serializer_class = serializers.GedungKuliahSerializer
 
+    def get_permissions(self):
+        return [AllowAny()] if self.request.method == 'GET' else [permissions.IsUptTIK()]
+    
 
 class PemberitahuanViewSet(ModelViewSet):
     http_method_names = ['get', 'patch', 'post', 'delete']
@@ -37,6 +50,9 @@ class PemberitahuanViewSet(ModelViewSet):
             return serializers.SimplePemberitahuanSerializer
         return serializers.PemberitahuanSerializer
 
+    def get_permissions(self):
+        return [AllowAny()] if self.request.method == 'GET' else [permissions.IsUptTIkOrIsStaffProdi()]
+    
 
 class ProgramStudiViewSet(ModelViewSet):
     queryset = models.ProgramStudi.objects.select_related('jurusan', 'program_pendidikan').all()
@@ -47,6 +63,13 @@ class ProgramStudiViewSet(ModelViewSet):
             return serializers.CreateUpdateProgramStudiSerializer
         return serializers.ProgramStudiSerializer
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        elif self.request.method == 'PUT':
+            return [permissions.IsUptTIkOrIsStaffProdi()]
+        return [permissions.IsUptTIK()]
+
 
 class StaffProdiViewSet(ModelViewSet):
     queryset = models.StaffProdi.objects.select_related('prodi', 'user').all()
@@ -56,6 +79,11 @@ class StaffProdiViewSet(ModelViewSet):
         if self.request.method in ['POST', 'PUT']:
             return serializers.CreateUpdateStaffProdiSerializer
         return serializers.StaffProdiSerializer
+    
+    def get_permissions(self):
+        if self.action == 'retrieve' or self.request.method == 'PUT':
+            return [permissions.IsUptTIkOrIsStaffProdi()]
+        return [permissions.IsUptTIK()]
     
     def create(self, request, *args, **kwargs):
         serializer = serializers.CreateUpdateStaffProdiSerializer(data=request.data)
@@ -74,6 +102,9 @@ class DosenViewSet(ModelViewSet):
             return serializers.CreateUpdateDosenSerializer
         return serializers.DosenSerializer
 
+    def get_permissions(self):
+        return [IsAuthenticated()] if self.request.method == 'GET' else [permissions.IsStaffProdi()]
+    
 
 class KelasViewSet(ModelViewSet):
     queryset = models.Kelas.objects\
@@ -85,6 +116,9 @@ class KelasViewSet(ModelViewSet):
             return serializers.CreateUpdateKelasSerializer
         return serializers.KelasSerializer
 
+    def get_permissions(self):
+        return [AllowAny()] if self.request.method == 'GET' else [permissions.IsStaffProdi()]
+    
 
 class MahasiswaViewSet(ModelViewSet):
     queryset = models.Mahasiswa.objects\
@@ -97,6 +131,11 @@ class MahasiswaViewSet(ModelViewSet):
             return serializers.CreateUpdateMahasiswaSerializer
         return serializers.MahasiswaSerializer
     
+    def get_permissions(self):
+        if self.action == 'retrieve' or self.request.method == 'PUT':
+            return [permissions.IsStaffProdiOrIsMahasiswa()]
+        return [permissions.IsStaffProdi()]
+    
 
 class RuanganViewSet(ModelViewSet):
     queryset = models.Ruangan.objects\
@@ -104,6 +143,9 @@ class RuanganViewSet(ModelViewSet):
                           'jadwalmakul_set__jadwal')\
         .all()
     serializer_class = serializers.RuanganSerializer
+
+    def get_permissions(self):
+        return [AllowAny()] if self.request.method == 'GET' else [permissions.IsUptTIK()]
     
 
 class AduanRuanganViewSet(ModelViewSet):
@@ -121,6 +163,13 @@ class AduanRuanganViewSet(ModelViewSet):
         context = super().get_serializer_context()
         context['ruangan_id'] = self.kwargs['ruangan_pk']
         return context
+    
+    def get_permissions(self):
+        if self.request.method in ['GET', 'DELETE']:
+            return [permissions.IsUptTIKOrIsMahasiswa()]
+        elif self.request.method == 'PUT':
+            return [permissions.IsUptTIK()]
+        return [permissions.IsMahasiswa()]
     
 
 class PemberitahuanProdiViewSet(ModelViewSet):
@@ -140,10 +189,16 @@ class PemberitahuanProdiViewSet(ModelViewSet):
         context = super().get_serializer_context()
         context['pemberitahuan_id'] = self.kwargs['pemberitahuan_pk']
         return context
-
+    
+    def get_permissions(self):
+        if self.request.method in ['POST']:
+            return [permissions.IsUptTIkOrIsStaffProdi()]
+        return [permissions.IsUptTIK()]
+    
 
 class PemberitahuanJurusanViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'delete']
+    permission_classes = [permissions.IsUptTIK]
 
     def get_queryset(self):
         return models.PemberitahuanJurusan.objects\
@@ -174,6 +229,13 @@ class KaryaIlmiahViewSet(ModelViewSet):
             return serializers.CreateUpdateKaryaIlmiahSerializer
         return serializers.KaryaIlmiahSerializer
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        elif self.request.method == 'DELETE':
+            return [permissions.IsStaffProdi()]
+        return [permissions.IsStaffProdiOrIsMahasiswa()]
+    
 
 class JadwalViewSet(ModelViewSet):
     def get_queryset(self):
@@ -190,11 +252,21 @@ class JadwalViewSet(ModelViewSet):
             return serializers.CreateUpdateJadwalSerializer
         return serializers.JadwalSerializer
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [permissions.IsStaffProdiOrIsMahasiswa()]
+        return [permissions.IsStaffProdi()]
+    
 
 class MataKuliahViewSet(ModelViewSet):
     queryset = models.MataKuliah.objects.all()
     serializer_class = serializers.MataKuliahSerializer
     lookup_field = 'kode'
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [permissions.IsStaffProdiOrIsMahasiswa()]
+        return [permissions.IsStaffProdi()]
 
 
 class JadwalMakulViewSet(ModelViewSet):
@@ -208,6 +280,11 @@ class JadwalMakulViewSet(ModelViewSet):
         context['jadwal_id'] = self.kwargs['jadwal_pk']
         return context
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [permissions.IsStaffProdiOrIsMahasiswa()]
+        return [permissions.IsStaffProdi()]
+    
 
 class KHSViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'delete']
@@ -221,13 +298,18 @@ class KHSViewSet(ModelViewSet):
             return serializers.CreateKHSSerializer
         return serializers.KHSSerializer
     
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [permissions.IsStaffProdiOrIsMahasiswa()]
+        return [permissions.IsStaffProdi()]
+    
     def create(self, request, *args, **kwargs):
         serializer = serializers.CreateKHSSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         khs = serializer.save()
         serializer = serializers.KHSSerializer(khs)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
+    
 
 class NilaiKHSViewSet(ModelViewSet):
     def get_queryset(self):
@@ -265,4 +347,8 @@ class NilaiKHSViewSet(ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [permissions.IsStaffProdiOrIsMahasiswa()]
+        return [permissions.IsStaffProdi()]
     
