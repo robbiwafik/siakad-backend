@@ -280,6 +280,11 @@ class JadwalMakulViewSet(ModelViewSet):
         context['jadwal_id'] = self.kwargs['jadwal_pk']
         return context
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [permissions.IsStaffProdiOrIsMahasiswa()]
+        return [permissions.IsStaffProdi()]
+    
 
 class KHSViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'delete']
