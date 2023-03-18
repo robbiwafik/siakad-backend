@@ -263,6 +263,11 @@ class MataKuliahViewSet(ModelViewSet):
     serializer_class = serializers.MataKuliahSerializer
     lookup_field = 'kode'
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [permissions.IsStaffProdiOrIsMahasiswa()]
+        return [permissions.IsStaffProdi()]
+
 
 class JadwalMakulViewSet(ModelViewSet):
     queryset = models.JadwalMakul.objects\
