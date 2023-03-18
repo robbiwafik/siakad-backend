@@ -347,4 +347,8 @@ class NilaiKHSViewSet(ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [permissions.IsStaffProdiOrIsMahasiswa()]
+        return [permissions.IsStaffProdi()]
     
