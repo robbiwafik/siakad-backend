@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 import os
 
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'djoser',
     'debug_toolbar',
     'core',
     'academic'
@@ -139,3 +141,17 @@ INTERNAL_IPS = [
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('JWT', ),
+    'AUTH_HEADER_NAME': 'HTTP_X_AUTH_TOKEN',
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=120),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=127)
+}
+

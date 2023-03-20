@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
 
 from . import models, serializers, permissions
 
@@ -125,15 +126,27 @@ class MahasiswaViewSet(ModelViewSet):
         .select_related('pembimbing_akademik', 'kelas', 'kelas__prodi', 'kelas__prodi__jurusan', 'kelas__semester', 'user')\
         .all()
     lookup_field = 'nim'
-    
+
+    @action(detail=False, methods=['GET', 'PUT'])
+    def me(self, request):
+        mahasiswa, is_created = models.Mahasiswa.objects.get_or_create(user_id=request.user.id)
+        if request.method == 'GET':
+            serializer = serializers.MahasiswaSerializer(mahasiswa)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        elif request.method == 'PUT':
+            serializer = serializers.CreateUpdateMahasiswaSerializer(mahasiswa, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+                
     def get_serializer_class(self):
         if self.request.method in ['POST', 'PUT']:
             return serializers.CreateUpdateMahasiswaSerializer
         return serializers.MahasiswaSerializer
     
     def get_permissions(self):
-        if self.action == 'retrieve' or self.request.method == 'PUT':
-            return [permissions.IsStaffProdiOrIsMahasiswa()]
+        if self.action == 'me':
+            return [permissions.IsMahasiswa()]
         return [permissions.IsStaffProdi()]
     
 
