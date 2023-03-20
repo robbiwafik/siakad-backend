@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 import os
 
@@ -149,6 +150,8 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT', ),
-    'AUTH_HEADER_NAME': 'HTTP_X_AUTH_TOKEN'
+    'AUTH_HEADER_NAME': 'HTTP_X_AUTH_TOKEN',
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=120),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=127)
 }
 
