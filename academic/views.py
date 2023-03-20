@@ -145,9 +145,7 @@ class MahasiswaViewSet(ModelViewSet):
         return serializers.MahasiswaSerializer
     
     def get_permissions(self):
-        if self.action == 'retrieve' or self.request.method == 'PUT':
-            return [permissions.IsStaffProdiOrIsMahasiswa()]
-        elif self.action == 'me':
+        if self.action == 'me':
             return [permissions.IsMahasiswa()]
         return [permissions.IsStaffProdi()]
     
