@@ -39,5 +39,10 @@ class UptTIKAdmin(admin.ModelAdmin):
 class JurusanAdmin(admin.ModelAdmin):
     list_display = ['id', 'nama']
     ordering = ['id']
- 
-    
+
+
+@admin.register(models.Semester)
+class SemesterAdmin(admin.ModelAdmin):
+    list_display = ['no']
+    ordering = ['no']
+

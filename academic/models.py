@@ -19,6 +19,9 @@ class Semester(models.Model):
     def __str__(self) -> str:
         return str(self.no)
     
+    class Meta:
+        verbose_name_plural = 'Semester'
+    
 
 class ProgramPendidikan(models.Model):
     kode = models.CharField(max_length=5, primary_key=True)
