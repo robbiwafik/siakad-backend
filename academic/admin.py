@@ -46,3 +46,8 @@ class SemesterAdmin(admin.ModelAdmin):
     list_display = ['no']
     ordering = ['no']
 
+
+@admin.register(models.ProgramPendidikan)
+class ProgramPendidikanAdmin(admin.ModelAdmin):
+    list_display = ['kode', 'nama']
+

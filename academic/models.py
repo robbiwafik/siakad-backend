@@ -30,6 +30,9 @@ class ProgramPendidikan(models.Model):
     def __str__(self) -> str:
         return self.nama
 
+    class Meta:
+        verbose_name_plural = 'Program Pendidikan'
+
 
 class GedungKuliah(models.Model):
     nama = models.CharField(max_length=255)
