@@ -34,3 +34,10 @@ class UptTIKAdmin(admin.ModelAdmin):
             return HttpResponseRedirect(url)
         return super().changelist_view(request, extra_context)
     
+
+@admin.register(models.Jurusan)
+class JurusanAdmin(admin.ModelAdmin):
+    list_display = ['id', 'nama']
+    ordering = ['id']
+ 
+    

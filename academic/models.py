@@ -9,6 +9,9 @@ class Jurusan(models.Model):
     def __str__(self) -> str:
         return self.nama
 
+    class Meta:
+        verbose_name_plural = 'Jurusan'
+    
 
 class Semester(models.Model):
     no = models.PositiveSmallIntegerField(primary_key=True, validators=[MinValueValidator(1)])
