@@ -51,3 +51,9 @@ class SemesterAdmin(admin.ModelAdmin):
 class ProgramPendidikanAdmin(admin.ModelAdmin):
     list_display = ['kode', 'nama']
 
+
+@admin.register(models.GedungKuliah)
+class GedungKuliahAdmin(admin.ModelAdmin):
+    list_display = ['id', 'nama']
+    ordering = ['id']
+        

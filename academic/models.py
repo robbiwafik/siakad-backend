@@ -40,6 +40,9 @@ class GedungKuliah(models.Model):
     def __str__(self) -> str:
         return self.nama
 
+    class Meta:
+        verbose_name_plural = 'Gedung Kuliah'
+    
 
 class Pemberitahuan(models.Model):
     judul = models.CharField(max_length=255)
