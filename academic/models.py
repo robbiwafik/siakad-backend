@@ -48,6 +48,12 @@ class UptTIK(models.Model):
     no_hp = models.CharField(max_length=13)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+        return f'{self.user.first_name} {self.user.last_name}'
+    
+    class Meta:
+        verbose_name_plural = 'UPT TIK'
+
 
 class ProgramStudi(models.Model):
 	kode = models.CharField(max_length=10, unique=True)
