@@ -121,10 +121,14 @@ class Dosen(models.Model):
     no_hp = models.CharField(max_length=13)
     gelar = models.CharField(max_length=20)
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.PROTECT)
+    foto_profil = models.ImageField(null=True, blank=True, upload_to='academic/images/')
 
     def __str__(self) -> str:
         return self.nama
-
+    
+    class Meta:
+        verbose_name_plural = 'Dosen'
+    
 
 class Kelas(models.Model):
     huruf = models.CharField(max_length=1)

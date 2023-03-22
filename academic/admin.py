@@ -115,7 +115,7 @@ class PemberitahuanAdmin(admin.ModelAdmin):
             
     class Media:
         css = {
-            'all': ['store/styles.css']
+            'all': ['academic/styles.css']
         }
 
 
@@ -154,4 +154,27 @@ class StaffProdiAdmin(admin.ModelAdmin):
             return HttpResponseRedirect(url)
         return super().changelist_view(request, extra_context)
     
-    
+
+@admin.register(models.Dosen)
+class DosenAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['prodi']
+    list_display = ['nip', 'nama', 'no_hp', 'gelar', 'prodi']
+    list_per_page = 10
+    readonly_fields = ['preview']
+    search_fields = ['nama']
+
+    def preview(self, dosen):
+        if dosen.foto_profil:
+            return format_html(f'<img class="thumbnail" src="/media/{dosen.foto_profil}" />')
+        return None
+
+    def get_queryset(self, request):
+        if hasattr(request.user, 'staffprodi'):
+            return models.Dosen.objects.filter(prodi=request.user.staffprodi.prodi)
+        return super().get_queryset(request)
+
+    class Media:
+        css = {
+            'all': ['academic/styles.css']
+        }
+
