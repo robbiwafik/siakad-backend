@@ -107,6 +107,12 @@ class StaffProdi(models.Model):
     def email(self):
         return self.user.email
     
+    def __str__(self) -> str:
+        return f'{self.user.first_name} {self.user.last_name}'
+    
+    class Meta:
+        verbose_name_plural = 'Staff Prodi'
+    
 
 class Dosen(models.Model):
     nip = models.CharField(max_length=20, unique=True)

@@ -123,6 +123,7 @@ class PemberitahuanAdmin(admin.ModelAdmin):
 class ProgramStudiAdmin(admin.ModelAdmin):
     list_display = ['kode', 'nama', 'tanggal_sk', 
                     'tahun_operasional', 'jurusan']
+    search_fields = ['nama']
 
     def changelist_view(self, request, extra_context=None):
         if hasattr(request.user, 'staffprodi'):
@@ -132,4 +133,25 @@ class ProgramStudiAdmin(admin.ModelAdmin):
             url = reverse(f'admin:{app_name}_{model_name}_change', args=[prodi.id])
             return HttpResponseRedirect(url)
         return super().changelist_view(request, extra_context)
+    
+
+@admin.register(models.StaffProdi)
+class StaffProdiAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['prodi', 'user']
+    list_display = ['no_induk', 'nama', 'email', 'username']
+    list_per_page = 10
+    list_select_related = ['user']
+    search_fields = ['user__first_name']
+
+    def nama(self, staff_prodi):
+        return f'{staff_prodi.user.first_name} {staff_prodi.user.last_name}'
+    
+    def changelist_view(self, request, extra_context=None):
+        if hasattr(request.user, 'staffprodi'):
+            app_name = self.model._meta.app_label
+            model_name = self.model._meta.model_name
+            url = reverse(f'admin:{app_name}_{model_name}_change', args=[request.user.staffprodi.id])
+            return HttpResponseRedirect(url)
+        return super().changelist_view(request, extra_context)
+    
     
