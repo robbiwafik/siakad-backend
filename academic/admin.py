@@ -178,3 +178,27 @@ class DosenAdmin(admin.ModelAdmin):
             'all': ['academic/styles.css']
         }
 
+
+@admin.register(models.Kelas)
+class KelasAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['prodi']
+    list_display = ['id', 'prodi', 'semester', 'huruf', 'mahasiswa']
+    list_per_page = 10
+    ordering = ['semester', 'huruf']
+
+    def mahasiswa(self, kelas):
+        # query_str = f'?kelas_id={kelas.id}'
+        # url = reverse(f'admin:academic_mahasiswa_changelist') + query_str
+        return format_html('<a class="btn-link" href="">Mahasiswa</a>')
+        
+    def get_queryset(self, request):
+        if hasattr(request.user, 'staffprodi'):
+            return models.Kelas.objects.filter(prodi=request.user.staffprodi.prodi)
+        return super().get_queryset(request)
+
+    class Media:
+        css = {
+            "all": ["academic/styles.css"]
+        }
+ 
+        

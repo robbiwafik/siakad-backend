@@ -135,6 +135,12 @@ class Kelas(models.Model):
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.PROTECT, related_name='kelas_list')
     semester = models.ForeignKey(Semester, on_delete=models.PROTECT, related_name="kelas_list")
 
+    def __str__(self) -> str:
+        return f"{self.prodi} {self.semester} {self.huruf}"
+    
+    class Meta:
+        verbose_name_plural = 'Kelas'
+
 
 class Mahasiswa(models.Model):
     nim = models.CharField(max_length=10, unique=True)
