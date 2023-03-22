@@ -74,18 +74,21 @@ class UptTIK(models.Model):
 
 
 class ProgramStudi(models.Model):
-	kode = models.CharField(max_length=10, unique=True)
-	nama = models.CharField(max_length=255)
-	jurusan = models.ForeignKey(Jurusan, on_delete=models.PROTECT)
-	program_pendidikan = models.ForeignKey(ProgramPendidikan, on_delete=models.PROTECT)
-	no_sk = models.CharField(max_length=12)
-	tanggal_sk = models.DateField()
-	tahun_operasional = models.PositiveIntegerField(validators=[MinValueValidator(2000), MaxValueValidator(3000)])
+    kode = models.CharField(max_length=10, unique=True)
+    nama = models.CharField(max_length=255)
+    jurusan = models.ForeignKey(Jurusan, on_delete=models.PROTECT)
+    program_pendidikan = models.ForeignKey(ProgramPendidikan, on_delete=models.PROTECT)
+    no_sk = models.CharField(max_length=12)
+    tanggal_sk = models.DateField()
+    tahun_operasional = models.PositiveIntegerField(validators=[MinValueValidator(2000), MaxValueValidator(3000)])
 	
-	def __str__(self) -> str:
-		return self.nama
-
-
+    def __str__(self) -> str:
+        return self.nama
+    
+    class Meta:
+        verbose_name_plural = 'Program Studi'
+    
+    
 class StaffProdi(models.Model):
     no_induk = models.CharField(max_length=20, unique=True)
     no_hp = models.CharField(max_length=255)
@@ -103,7 +106,7 @@ class StaffProdi(models.Model):
     
     def email(self):
         return self.user.email
-
+    
 
 class Dosen(models.Model):
     nip = models.CharField(max_length=20, unique=True)

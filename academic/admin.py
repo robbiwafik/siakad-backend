@@ -118,3 +118,18 @@ class PemberitahuanAdmin(admin.ModelAdmin):
             'all': ['store/styles.css']
         }
 
+
+@admin.register(models.ProgramStudi)
+class ProgramStudiAdmin(admin.ModelAdmin):
+    list_display = ['kode', 'nama', 'tanggal_sk', 
+                    'tahun_operasional', 'jurusan']
+
+    def changelist_view(self, request, extra_context=None):
+        if hasattr(request.user, 'staffprodi'):
+            prodi = request.user.staffprodi.prodi
+            app_name = self.model._meta.app_label
+            model_name = self.model._meta.model_name
+            url = reverse(f'admin:{app_name}_{model_name}_change', args=[prodi.id])
+            return HttpResponseRedirect(url)
+        return super().changelist_view(request, extra_context)
+    
