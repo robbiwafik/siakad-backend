@@ -1,6 +1,8 @@
 from django.contrib import admin
-from django.urls import reverse
+from django.db.models import Q
 from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.utils.html import format_html
 
 from . import models
 
@@ -56,4 +58,63 @@ class ProgramPendidikanAdmin(admin.ModelAdmin):
 class GedungKuliahAdmin(admin.ModelAdmin):
     list_display = ['id', 'nama']
     ordering = ['id']
-        
+
+
+class FilterJurusanInline(admin.TabularInline):
+    extra = 0
+    model = models.PemberitahuanJurusan
+    verbose_name = ''
+    verbose_name_plural = 'Filter'
+
+
+class FilterProdiInline(admin.TabularInline):
+    extra = 0
+    model = models.PemberitahuanProdi
+    verbose_name = ''
+    verbose_name_plural = 'Filter'
+
+
+@admin.register(models.Pemberitahuan)
+class PemberitahuanAdmin(admin.ModelAdmin):
+    fields = ['judul', 'sub_judul', 'detail', 'tanggal_hapus', 'file', 'link', 'thumbnail', 'preview']
+    list_display = ['id', 'judul', 'tanggal_terbit', 'tanggal_hapus']
+    list_per_page = 10
+    ordering = ['-tanggal_terbit']
+    readonly_fields = ['preview']
+    search_fields = ['judul']
+
+    def isStaffProdi(self, request):
+        return hasattr(request.user, 'staffprodi')
+
+    def preview(self, pemberitahuan):
+        if pemberitahuan.thumbnail:
+            return format_html(f"<img class='thumbnail' src='/media/{pemberitahuan.thumbnail}' />")
+        return None
+    
+    def get_queryset(self, request):
+        if self.isStaffProdi(request):
+            return models.Pemberitahuan.objects.filter(
+                Q(filter_prodi__prodi=request.user.staffprodi.prodi) | Q(filter_prodi__isnull=True)
+            )
+            
+        return super().get_queryset(request)
+    
+    def get_inline_instances(self, request, obj=None):
+        if self.isStaffProdi(request):
+            return []
+        return [FilterJurusanInline(self.model, self.admin_site), 
+                FilterProdiInline(self.model, self.admin_site)]
+            
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if self.isStaffProdi(request):
+            models.PemberitahuanProdi.objects.create(
+                pemberitahuan_id=obj.id,
+                prodi=request.user.staffprodi.prodi
+            )
+            
+    class Media:
+        css = {
+            'all': ['store/styles.css']
+        }
+

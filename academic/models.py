@@ -50,9 +50,15 @@ class Pemberitahuan(models.Model):
     detail = models.TextField(null=True)
     tanggal_terbit = models.DateField(auto_now_add=True)
     tanggal_hapus = models.DateField(null=True)
-    thumbnail = models.ImageField()
-    file = models.FileField(null=True)
-    link = models.URLField(null=True)
+    thumbnail = models.ImageField(upload_to='academic/images/')
+    file = models.FileField(null=True, blank=True, upload_to='academic/files/')
+    link = models.URLField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        return self.judul
+
+    class Meta:
+        verbose_name_plural = 'Pemberitahuan'
 
 
 class UptTIK(models.Model):
