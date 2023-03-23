@@ -250,4 +250,11 @@ class MahasiswaAdmin(admin.ModelAdmin):
             'all': ['academic/styles.css']
         }
 
-    
+
+@admin.register(models.Ruangan)
+class RuanganAdmin(admin.ModelAdmin):
+    list_display = ['id', 'nama', 'gedung']
+    list_filter = ['gedung']
+    search_fields = ['nama']
+    list_per_page = 10
+

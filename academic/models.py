@@ -176,6 +176,9 @@ class Ruangan(models.Model):
     def __str__(self) -> str:
         return self.nama
 
+    class Meta:
+        verbose_name_plural = 'Ruangan'
+    
 
 class AduanRuangan(models.Model):
     STATUS_DI_TANGGAPI = 'D'
