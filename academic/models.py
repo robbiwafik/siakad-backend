@@ -226,11 +226,14 @@ class KaryaIlmiah(models.Model):
     link_versi_full = models.URLField(null=True)
     tipe = models.CharField(max_length=3, choices=TIPE_CHOICES)
     file_preview = models.FileField()
-    mahasiswa = models.ForeignKey(Mahasiswa, on_delete=models.SET_NULL, null=True, related_name='karya_ilmiah_list')
+    mahasiswa = models.ForeignKey(Mahasiswa, on_delete=models.SET_NULL, null=True, blank=True, related_name='karya_ilmiah_list')
 
     # We can get the 'prodi' using 'mahasiswa' field, but the requirement says that this field should be flexible
     # because the 'staff prodi' actor should be able to upload 'karya ilmiah'. 
-    prodi = models.ForeignKey(ProgramStudi, on_delete=models.SET_NULL, null=True, related_name='karya_ilmiah_list') # add related_name later
+    prodi = models.ForeignKey(ProgramStudi, on_delete=models.SET_NULL, null=True, related_name='karya_ilmiah_list')
+
+    class Meta:
+        verbose_name_plural = 'Karya Ilmiah'
 
 
 class Jadwal(models.Model):

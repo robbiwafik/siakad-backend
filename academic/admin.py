@@ -287,3 +287,25 @@ class AduanRuanganAdmin(admin.ModelAdmin):
             'all': ['academic/styles.css']
         }
 
+
+@admin.register(models.KaryaIlmiah)
+class KaryaIlmiahAdmin(admin.ModelAdmin):
+    list_display = ['judul', 'tanggal_terbit', 'tipe', 'prodi']
+    search_fields = ['judul', 'mahasiswa__nim']
+    list_filter = ['tipe']
+    list_per_page = 10
+    autocomplete_fields = ['mahasiswa', 'prodi']
+
+    def get_queryset(self, request):
+        if hasattr(request.user, 'staffprodi'):
+            return models.KaryaIlmiah.objects.filter(prodi=request.user.staffprodi.prodi)
+        return super().get_queryset(request)
+    
+    def get_readonly_fields(self, request, obj=None):
+        if obj is not None:
+            return ['judul', 'abstrak', 'tanggal_terbit',
+                       'link_versi_full', 'tipe', 'file_preview', 
+                       'mahasiswa', 'prodi']
+        return super().get_readonly_fields(request, obj)
+    
+    
