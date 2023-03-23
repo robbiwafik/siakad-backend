@@ -253,8 +253,37 @@ class MahasiswaAdmin(admin.ModelAdmin):
 
 @admin.register(models.Ruangan)
 class RuanganAdmin(admin.ModelAdmin):
-    list_display = ['id', 'nama', 'gedung']
+    list_display = ['id', 'nama', 'gedung', 'aduan']
     list_filter = ['gedung']
     search_fields = ['nama']
     list_per_page = 10
+
+    def aduan(self, ruangan):
+        query_str = f"?ruangan_id={ruangan.id}"
+        url = reverse('admin:academic_aduanruangan_changelist') + query_str
+        return format_html(f'<a class="btn-link" href="{url}">Aduan</a>')
+
+    class Media:
+        css = {
+            'all': ['academic/styles.css']
+        }
+    
+
+@admin.register(models.AduanRuangan)
+class AduanRuanganAdmin(admin.ModelAdmin):
+    list_display = ['id', 'detail', 'ruangan', 'status']
+    list_editable = ['status']
+    list_per_page = 10
+    readonly_fields = ['detail', 'ruangan', 'foto', 'preview']
+    search_fields = ['detail']
+
+    def preview(self, aduan_ruangan):
+        if aduan_ruangan.foto:
+            return format_html(f'<img class="bigger-edthumbnail" src="/media/{aduan_ruangan.foto}" />')
+        return None
+
+    class Media:
+        css = {
+            'all': ['academic/styles.css']
+        }
 

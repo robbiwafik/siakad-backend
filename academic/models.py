@@ -189,9 +189,12 @@ class AduanRuangan(models.Model):
     ]
     detail = models.TextField()
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=STATUS_BELUM_DIBACA)
-    foto = models.ImageField()
+    foto = models.ImageField(null=True, upload_to='academic/images/')
     ruangan = models.ForeignKey(Ruangan, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name_plural = 'Aduan Ruangan'
+    
 
 class PemberitahuanProdi(models.Model):
     pemberitahuan = models.ForeignKey(Pemberitahuan, on_delete=models.CASCADE, related_name="filter_prodi")
