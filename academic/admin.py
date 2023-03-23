@@ -185,11 +185,12 @@ class KelasAdmin(admin.ModelAdmin):
     list_display = ['id', 'prodi', 'semester', 'huruf', 'mahasiswa']
     list_per_page = 10
     ordering = ['semester', 'huruf']
+    search_fields = ['prodi']
 
     def mahasiswa(self, kelas):
-        # query_str = f'?kelas_id={kelas.id}'
-        # url = reverse(f'admin:academic_mahasiswa_changelist') + query_str
-        return format_html('<a class="btn-link" href="">Mahasiswa</a>')
+        query_str = f'?kelas_id={kelas.id}'
+        url = reverse(f'admin:academic_mahasiswa_changelist') + query_str
+        return format_html(f'<a class="btn-link" href="{url}">Mahasiswa</a>')
         
     def get_queryset(self, request):
         if hasattr(request.user, 'staffprodi'):
@@ -200,5 +201,53 @@ class KelasAdmin(admin.ModelAdmin):
         css = {
             "all": ["academic/styles.css"]
         }
- 
-        
+
+
+class MahasiswaFilter(admin.SimpleListFilter):
+    title = 'semester'
+    parameter_name = 'semester'
+
+    def lookups(self, request, model_admin):
+         return [(semester.no, f'Semester {semester.no}') for semester in list(models.Semester.objects.all())]
+    
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(kelas__semester=self.value())
+        return queryset.all()
+
+
+@admin.register(models.Mahasiswa)
+class MahasiswaAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['pembimbing_akademik', 'user']
+    fields = ['nim', 'tanggal_lahir', 'no_hp', 'alamat', 
+              'tahun_angkatan', 'pembimbing_akademik', 'kelas',
+              'user', 'foto_profil', 'preview']
+    list_display = ['nim', 'nama', 'username', 'kelas']
+    list_filter = [MahasiswaFilter]
+    list_per_page = 10
+    search_fields = ['nama']
+    readonly_fields = ['preview']
+
+    def preview(self, mahasiswa):
+        if mahasiswa.foto_profil:
+            return format_html(f'<img class="thumbnail" src="/media/{mahasiswa.foto_profil}" />')
+        return None
+
+    def nama(self, mahasiswa):
+        return f'{mahasiswa.user.first_name} {mahasiswa.user.last_name}'
+
+    def username(self, mahasiswa):
+        return mahasiswa.user.username
+
+    def get_queryset(self, request):
+        if hasattr(request.user, 'staffprodi'):
+            prodi = request.user.staffprodi.prodi
+            return models.Mahasiswa.objects.filter(kelas__prodi=prodi)
+        return super().get_queryset(request)
+
+    class Media:
+        css = {
+            'all': ['academic/styles.css']
+        }
+
+    

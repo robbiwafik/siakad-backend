@@ -147,7 +147,7 @@ class Mahasiswa(models.Model):
     tanggal_lahir = models.DateField()
     no_hp = models.CharField(max_length=13, null=True)
     alamat = models.TextField(null=True)
-    foto_profil = models.ImageField(null=True)
+    foto_profil = models.ImageField(null=True, blank=True, upload_to='academic/images/')
     tahun_angkatan = models.PositiveIntegerField(validators=[MinValueValidator(2008), MaxValueValidator(3000)])
     pembimbing_akademik = models.ForeignKey(Dosen, on_delete=models.SET_NULL, null=True, related_name='mahasiswa_didik')
     kelas = models.ForeignKey(Kelas, on_delete=models.PROTECT, related_name='mahasiswa_list')
@@ -165,6 +165,9 @@ class Mahasiswa(models.Model):
     def email(self):
         return self.user.email
 
+    class Meta:
+        verbose_name_plural = 'Mahasiswa'
+    
 
 class Ruangan(models.Model):
     nama = models.CharField(max_length=255)
