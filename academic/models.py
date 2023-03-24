@@ -239,6 +239,12 @@ class KaryaIlmiah(models.Model):
 class Jadwal(models.Model):
     kelas = models.OneToOneField(Kelas, on_delete=models.CASCADE, related_name='jadwal_list')
 
+    def __str__(self) -> str:
+        return f'{self.kelas}'
+    
+    class Meta:
+        verbose_name_plural = 'Jadwal'
+
 
 class MataKuliah(models.Model):
     kode = models.CharField(max_length=255, unique=True)

@@ -308,4 +308,27 @@ class KaryaIlmiahAdmin(admin.ModelAdmin):
                        'mahasiswa', 'prodi']
         return super().get_readonly_fields(request, obj)
     
+
+class MataKuliahInline(admin.TabularInline):
+    model = models.JadwalMakul
+    extra = 0
+    fields = ['mata_kuliah', 'ruangan', 'dosen',
+              'hari', 'jam_mulai', 'jam_selesai']
+    #autocomplete_fields = ['mata_kuliah', 'ruangan', 'dosen']
+    
+
+@admin.register(models.Jadwal)
+class JadwalAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['kelas']
+    inlines = [MataKuliahInline]
+    list_display = ['id', 'kelas']
+    list_per_page = 10
+    ordering = ['kelas']
+
+    def get_queryset(self, request):
+        if hasattr(request.user, 'staffprodi'):
+            prodi = request.user.staffprodi.prodi
+            return models.Jadwal.objects.filter(kelas__prodi=prodi)
+        return super().get_queryset(request)
+    
     
