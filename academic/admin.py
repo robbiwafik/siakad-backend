@@ -349,3 +349,36 @@ class MataKuliahAdmin(admin.ModelAdmin):
             obj.program_studi = request.user.staffprodi.prodi
         obj.save()
     
+
+class NilaiKHSInline(admin.TabularInline):
+    autocomplete_fields = ['mata_kuliah']
+    extra = 0
+    fields = ['mata_kuliah', 'angka_mutu', 'huruf_mutu', 'nilai']
+    model = models.NilaiKHS
+
+
+@admin.register(models.KHS)
+class KHSAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['mahasiswa']
+    fields = ['mahasiswa', 'tahun_akademik_awal', 'tahun_akademik_akhir']
+    inlines = [NilaiKHSInline]
+    list_display = ['mahasiswa', 'semester', 'tahun_akademik', 'kelas']
+
+    def tahun_akademik(self, khs):
+        return f"{khs.tahun_akademik_awal}/{khs.tahun_akademik_akhir}"
+    
+    def get_queryset(self, request):
+        if hasattr(request.user, 'staffprodi'):
+            prodi = request.user.staffprodi.prodi
+            return models.KHS.objects.filter(mahasiswa__kelas__prodi=prodi)
+        return super().get_queryset(request)
+
+    def save_model(self, request, obj, form, change):
+        obj.semester = int(obj.mahasiswa.kelas.semester.no)
+        obj.program_studi = str(obj.mahasiswa.kelas.prodi.nama)
+        obj.program_pendidikan = str(obj.mahasiswa.kelas.prodi.program_pendidikan.nama)
+        obj.dosen_pembimbing = str(obj.mahasiswa.pembimbing_akademik.nama)
+        obj.kelas = str(obj.mahasiswa.kelas.huruf)
+        obj.save()
+
+    

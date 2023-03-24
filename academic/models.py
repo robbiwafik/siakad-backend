@@ -301,6 +301,9 @@ class KHS(models.Model):
     dosen_pembimbing = models.CharField(max_length=255)
     kelas = models.CharField(max_length=5)
     mahasiswa = models.ForeignKey(Mahasiswa, on_delete=models.CASCADE, related_name='khs_list')
+
+    class Meta:
+        verbose_name_plural = 'KHS'    
     
 
 class NilaiKHS(models.Model):
