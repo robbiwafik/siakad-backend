@@ -251,11 +251,15 @@ class MataKuliah(models.Model):
     nama = models.CharField(max_length=255)
     jumlah_teori = models.PositiveSmallIntegerField()
     jumlah_pratikum = models.PositiveSmallIntegerField()
+    program_studi = models.ForeignKey(ProgramStudi, on_delete=models.CASCADE, related_name='list_makul')
 
     def __str__(self) -> str:
         return self.nama
 
+    class Meta:
+        verbose_name_plural = 'Mata Kuliah'
 
+    
 class JadwalMakul(models.Model):
     HARI_SENIN = 'S'
     HARI_SELASA = 'SE'
@@ -279,6 +283,7 @@ class JadwalMakul(models.Model):
     mata_kuliah = models.ForeignKey(MataKuliah, on_delete=models.CASCADE)
     
     class Meta:
+        verbose_name_plural = ''
         unique_together = ['jam_mulai', 'jam_selesai', 'hari', 'ruangan']
 
 
@@ -307,3 +312,4 @@ class NilaiKHS(models.Model):
 
     class Meta:
         unique_together = ['mata_kuliah', 'khs']
+

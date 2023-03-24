@@ -314,7 +314,7 @@ class MataKuliahInline(admin.TabularInline):
     extra = 0
     fields = ['mata_kuliah', 'ruangan', 'dosen',
               'hari', 'jam_mulai', 'jam_selesai']
-    #autocomplete_fields = ['mata_kuliah', 'ruangan', 'dosen']
+    autocomplete_fields = ['mata_kuliah', 'ruangan', 'dosen']
     
 
 @admin.register(models.Jadwal)
@@ -331,4 +331,21 @@ class JadwalAdmin(admin.ModelAdmin):
             return models.Jadwal.objects.filter(kelas__prodi=prodi)
         return super().get_queryset(request)
     
+
+@admin.register(models.MataKuliah)
+class MataKuliahAdmin(admin.ModelAdmin):
+    exclude = ['program_studi']
+    list_display = ['kode', 'nama', 'jumlah_teori', 'jumlah_pratikum']
+    search_fields = ['nama']
+
+    def get_queryset(self, request):
+        if hasattr(request.user, 'staffprodi'):
+            prodi = request.user.staffprodi.prodi
+            return models.MataKuliah.objects.filter(program_studi=prodi)
+        return super().get_queryset(request)
+    
+    def save_model(self, request, obj, form, change):
+        if hasattr(request.user, 'staffprodi'):
+            obj.program_studi = request.user.staffprodi.prodi
+        obj.save()
     
