@@ -155,3 +155,5 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=127)
 }
 
+LANGUAGE_CODE = 'id'
+
