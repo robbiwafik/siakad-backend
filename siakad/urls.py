@@ -18,6 +18,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
 
+admin.site.site_header = 'Sistem Informasi Akademik'
+admin.site.index_title = ''
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('academic/', include('academic.urls')),

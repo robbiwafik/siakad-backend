@@ -1,0 +1,23 @@
+.thumbnail {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.btn-link {
+    background-color: #a0d2eb;
+    color: #fff !important;
+    padding: 7px;
+    border: none;
+    border-radius: 2px;
+}
+
+.btn-link:hover {
+    background-color:  #81c6e9;
+}
+
+.bigger-thumbnail {
+    width: 500px;
+    height: 500px;
+    object-fit: cover;
+}

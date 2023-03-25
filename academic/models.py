@@ -9,12 +9,18 @@ class Jurusan(models.Model):
     def __str__(self) -> str:
         return self.nama
 
+    class Meta:
+        verbose_name_plural = 'Jurusan'
+    
 
 class Semester(models.Model):
     no = models.PositiveSmallIntegerField(primary_key=True, validators=[MinValueValidator(1)])
 
     def __str__(self) -> str:
         return str(self.no)
+    
+    class Meta:
+        verbose_name_plural = 'Semester'
     
 
 class ProgramPendidikan(models.Model):
@@ -24,6 +30,9 @@ class ProgramPendidikan(models.Model):
     def __str__(self) -> str:
         return self.nama
 
+    class Meta:
+        verbose_name_plural = 'Program Pendidikan'
+
 
 class GedungKuliah(models.Model):
     nama = models.CharField(max_length=255)
@@ -31,6 +40,9 @@ class GedungKuliah(models.Model):
     def __str__(self) -> str:
         return self.nama
 
+    class Meta:
+        verbose_name_plural = 'Gedung Kuliah'
+    
 
 class Pemberitahuan(models.Model):
     judul = models.CharField(max_length=255)
@@ -38,9 +50,15 @@ class Pemberitahuan(models.Model):
     detail = models.TextField(null=True)
     tanggal_terbit = models.DateField(auto_now_add=True)
     tanggal_hapus = models.DateField(null=True)
-    thumbnail = models.ImageField()
-    file = models.FileField(null=True)
-    link = models.URLField(null=True)
+    thumbnail = models.ImageField(upload_to='academic/images/')
+    file = models.FileField(null=True, blank=True, upload_to='academic/files/')
+    link = models.URLField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        return self.judul
+
+    class Meta:
+        verbose_name_plural = 'Pemberitahuan'
 
 
 class UptTIK(models.Model):
@@ -48,20 +66,29 @@ class UptTIK(models.Model):
     no_hp = models.CharField(max_length=13)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def __str__(self) -> str:
+        return f'{self.user.first_name} {self.user.last_name}'
+    
+    class Meta:
+        verbose_name_plural = 'UPT TIK'
+
 
 class ProgramStudi(models.Model):
-	kode = models.CharField(max_length=10, unique=True)
-	nama = models.CharField(max_length=255)
-	jurusan = models.ForeignKey(Jurusan, on_delete=models.PROTECT)
-	program_pendidikan = models.ForeignKey(ProgramPendidikan, on_delete=models.PROTECT)
-	no_sk = models.CharField(max_length=12)
-	tanggal_sk = models.DateField()
-	tahun_operasional = models.PositiveIntegerField(validators=[MinValueValidator(2000), MaxValueValidator(3000)])
+    kode = models.CharField(max_length=10, unique=True)
+    nama = models.CharField(max_length=255)
+    jurusan = models.ForeignKey(Jurusan, on_delete=models.PROTECT)
+    program_pendidikan = models.ForeignKey(ProgramPendidikan, on_delete=models.PROTECT)
+    no_sk = models.CharField(max_length=12)
+    tanggal_sk = models.DateField()
+    tahun_operasional = models.PositiveIntegerField(validators=[MinValueValidator(2000), MaxValueValidator(3000)])
 	
-	def __str__(self) -> str:
-		return self.nama
-
-
+    def __str__(self) -> str:
+        return self.nama
+    
+    class Meta:
+        verbose_name_plural = 'Program Studi'
+    
+    
 class StaffProdi(models.Model):
     no_induk = models.CharField(max_length=20, unique=True)
     no_hp = models.CharField(max_length=255)
@@ -79,7 +106,13 @@ class StaffProdi(models.Model):
     
     def email(self):
         return self.user.email
-
+    
+    def __str__(self) -> str:
+        return f'{self.user.first_name} {self.user.last_name}'
+    
+    class Meta:
+        verbose_name_plural = 'Staff Prodi'
+    
 
 class Dosen(models.Model):
     nip = models.CharField(max_length=20, unique=True)
@@ -88,15 +121,25 @@ class Dosen(models.Model):
     no_hp = models.CharField(max_length=13)
     gelar = models.CharField(max_length=20)
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.PROTECT)
+    foto_profil = models.ImageField(null=True, blank=True, upload_to='academic/images/')
 
     def __str__(self) -> str:
         return self.nama
-
+    
+    class Meta:
+        verbose_name_plural = 'Dosen'
+    
 
 class Kelas(models.Model):
     huruf = models.CharField(max_length=1)
     prodi = models.ForeignKey(ProgramStudi, on_delete=models.PROTECT, related_name='kelas_list')
     semester = models.ForeignKey(Semester, on_delete=models.PROTECT, related_name="kelas_list")
+
+    def __str__(self) -> str:
+        return f"{self.prodi} {self.semester} {self.huruf}"
+    
+    class Meta:
+        verbose_name_plural = 'Kelas'
 
 
 class Mahasiswa(models.Model):
@@ -104,7 +147,7 @@ class Mahasiswa(models.Model):
     tanggal_lahir = models.DateField()
     no_hp = models.CharField(max_length=13, null=True)
     alamat = models.TextField(null=True)
-    foto_profil = models.ImageField(null=True)
+    foto_profil = models.ImageField(null=True, blank=True, upload_to='academic/images/')
     tahun_angkatan = models.PositiveIntegerField(validators=[MinValueValidator(2008), MaxValueValidator(3000)])
     pembimbing_akademik = models.ForeignKey(Dosen, on_delete=models.SET_NULL, null=True, related_name='mahasiswa_didik')
     kelas = models.ForeignKey(Kelas, on_delete=models.PROTECT, related_name='mahasiswa_list')
@@ -122,6 +165,9 @@ class Mahasiswa(models.Model):
     def email(self):
         return self.user.email
 
+    class Meta:
+        verbose_name_plural = 'Mahasiswa'
+    
 
 class Ruangan(models.Model):
     nama = models.CharField(max_length=255)
@@ -130,6 +176,9 @@ class Ruangan(models.Model):
     def __str__(self) -> str:
         return self.nama
 
+    class Meta:
+        verbose_name_plural = 'Ruangan'
+    
 
 class AduanRuangan(models.Model):
     STATUS_DI_TANGGAPI = 'D'
@@ -140,9 +189,12 @@ class AduanRuangan(models.Model):
     ]
     detail = models.TextField()
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=STATUS_BELUM_DIBACA)
-    foto = models.ImageField()
+    foto = models.ImageField(null=True, upload_to='academic/images/')
     ruangan = models.ForeignKey(Ruangan, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name_plural = 'Aduan Ruangan'
+    
 
 class PemberitahuanProdi(models.Model):
     pemberitahuan = models.ForeignKey(Pemberitahuan, on_delete=models.CASCADE, related_name="filter_prodi")
@@ -174,15 +226,24 @@ class KaryaIlmiah(models.Model):
     link_versi_full = models.URLField(null=True)
     tipe = models.CharField(max_length=3, choices=TIPE_CHOICES)
     file_preview = models.FileField()
-    mahasiswa = models.ForeignKey(Mahasiswa, on_delete=models.SET_NULL, null=True, related_name='karya_ilmiah_list')
+    mahasiswa = models.ForeignKey(Mahasiswa, on_delete=models.SET_NULL, null=True, blank=True, related_name='karya_ilmiah_list')
 
     # We can get the 'prodi' using 'mahasiswa' field, but the requirement says that this field should be flexible
     # because the 'staff prodi' actor should be able to upload 'karya ilmiah'. 
-    prodi = models.ForeignKey(ProgramStudi, on_delete=models.SET_NULL, null=True, related_name='karya_ilmiah_list') # add related_name later
+    prodi = models.ForeignKey(ProgramStudi, on_delete=models.SET_NULL, null=True, related_name='karya_ilmiah_list')
+
+    class Meta:
+        verbose_name_plural = 'Karya Ilmiah'
 
 
 class Jadwal(models.Model):
     kelas = models.OneToOneField(Kelas, on_delete=models.CASCADE, related_name='jadwal_list')
+
+    def __str__(self) -> str:
+        return f'{self.kelas}'
+    
+    class Meta:
+        verbose_name_plural = 'Jadwal'
 
 
 class MataKuliah(models.Model):
@@ -190,11 +251,15 @@ class MataKuliah(models.Model):
     nama = models.CharField(max_length=255)
     jumlah_teori = models.PositiveSmallIntegerField()
     jumlah_pratikum = models.PositiveSmallIntegerField()
+    program_studi = models.ForeignKey(ProgramStudi, on_delete=models.CASCADE, related_name='list_makul')
 
     def __str__(self) -> str:
         return self.nama
 
+    class Meta:
+        verbose_name_plural = 'Mata Kuliah'
 
+    
 class JadwalMakul(models.Model):
     HARI_SENIN = 'S'
     HARI_SELASA = 'SE'
@@ -218,6 +283,7 @@ class JadwalMakul(models.Model):
     mata_kuliah = models.ForeignKey(MataKuliah, on_delete=models.CASCADE)
     
     class Meta:
+        verbose_name_plural = ''
         unique_together = ['jam_mulai', 'jam_selesai', 'hari', 'ruangan']
 
 
@@ -235,6 +301,9 @@ class KHS(models.Model):
     dosen_pembimbing = models.CharField(max_length=255)
     kelas = models.CharField(max_length=5)
     mahasiswa = models.ForeignKey(Mahasiswa, on_delete=models.CASCADE, related_name='khs_list')
+
+    class Meta:
+        verbose_name_plural = 'KHS'    
     
 
 class NilaiKHS(models.Model):
@@ -246,3 +315,4 @@ class NilaiKHS(models.Model):
 
     class Meta:
         unique_together = ['mata_kuliah', 'khs']
+
